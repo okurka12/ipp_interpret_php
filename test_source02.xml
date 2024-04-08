@@ -1,0 +1,6 @@
+<!-- example XML that I wrote by hand -->
+<program language="IPPcode24">
+    <instruction order="1" opcode="pushs">
+        <arg1 type="var">counter</arg1>
+    </instruction>
+</program>
