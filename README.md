@@ -1,7 +1,35 @@
+# IPP `interpret.php`
+
+This is my implementation of the second part of the IPP course project.
+
+Date: 2024-04-08
+
+## prerequisites
+
+- have php8.3 (when building from source, use `./configure --with-openssl`)
+- run `php composer.phar install`
+
+## how to use
+- `php interpret.php`
+- `./vendor php ./vendor/bin/phpstan analyse --level max`
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+here follows the original readme
+
 # IPP - PHP Project Core
 
-**Authors:** 
-Radim Kocman, 
+**Authors:**
+Radim Kocman,
 Zbyněk Křivka
 
 This README describes the basic structure of the project, briefly introduces recommended tools and shows how to set up a suitable development environment.
@@ -21,7 +49,7 @@ You should not modify any files from the Core namespace. However, you are free t
 
 ## About Tools
 
-This is a brief overview of tools recommended for the project. It is not required to install and use every tool mentioned here. 
+This is a brief overview of tools recommended for the project. It is not required to install and use every tool mentioned here.
 
 ### Text Editor
 
@@ -60,7 +88,7 @@ Docker (https://www.docker.com/) represents an ecosystem of tools that allow use
 
 ### Development Containers
 
-Development Containers (https://containers.dev/) is an open specification that combines docker containers with text editors to create seamless and consistent full-featured development environments. 
+Development Containers (https://containers.dev/) is an open specification that combines docker containers with text editors to create seamless and consistent full-featured development environments.
 For VS Code, you can use the following detailed guide: https://code.visualstudio.com/docs/devcontainers/containers.
 
 The configuration of a development container suitable for this project is located in `.devcontainer` directory. There is also a launch configuration for the debug extension in `.vscode` directory.
