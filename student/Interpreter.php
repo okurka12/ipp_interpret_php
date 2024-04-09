@@ -28,8 +28,19 @@ function dprintinfo(string $s, mixed $v): void
 /* prints string version of `v` prefixed with `s` */
 function dprintstring(string $s, mixed $v): void
 {
-    if ($v instanceof Stringable) {
+    if ($v instanceof Stringable || is_string($v)) {
         dprint_stderr($s . ": " . (string)$v . "\n");
+    } else {
+        if (is_object(($v)))
+        {
+            $objinfo = "(object of class " . get_class($v) . ")";
+        }
+        else
+        {
+            $objinfo = "";
+        }
+        dprint_stderr("warning: dprintstring called on non-stringable " .
+        "variable" . $objinfo . "\n");
     }
 }
 
@@ -37,18 +48,31 @@ class Instruction
 {
     /* raw dom element */
     private DOMElement $raw_de;
-    public string $opcode;
-    public int $order;
+
+    /* instruction opcode, always lowercase */
+    private string $opcode;
+
+    private int $order;
     public function __construct(DOMElement $de)
     {
         $this->raw_de = $de;
-        $this->opcode = $de->getAttribute("opcode");
+        $this->opcode = strtolower($de->getAttribute("opcode"));
         $this->order = (int)$de->getAttribute("order");
     }
 
     public function __toString()
     {
-        return "opcode: " . $this->opcode . " order: " . (string)$this->order;
+        return "opcode: " . str_pad($this->opcode, 10) . " order: " .
+        (string)$this->order;
+    }
+    public function is_label(): bool
+    {
+        return $this->opcode === "label";
+    }
+    public function get_content(): string
+    {
+        /* the label is actually in the child `arg1` element but thats okay */
+        return $this->raw_de->textContent;
     }
 }
 
@@ -59,12 +83,25 @@ class InstructionList
 
     public function __construct(DOMDocument $dom)
     {
+        $this->list = array();
         foreach($dom->getElementsByTagName("instruction") as $inele) {
-            $this->list = array();
             array_push($this->list, new Instruction($inele));
             dprintstring("instruction", end($this->list));
         }
         return;
+    }
+
+    public function get_labels(): array
+    {
+        $output = array();
+        foreach ($this->list as $in)
+        {
+            if ($in->is_label())
+            {
+                array_push($output, $in->get_content());
+            }
+        }
+        return $output;
     }
 
 }
@@ -92,7 +129,8 @@ class Interpreter extends AbstractInterpreter
         // $this->stderr->writeString("stderr");
 
         $k = new InstructionList($dom);
-        dprintinfo("", "cauky\n");
+        $labels = $k->get_labels();
+        dprintinfo("labels", $labels);
         return 0;
         // throw new NotImplementedException;
     }
