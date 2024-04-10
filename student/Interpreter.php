@@ -139,8 +139,14 @@ class Instruction
 
     public function get_first_arg_value(): string
     {
-        return
-        $this->raw_de->getElementsByTagName("arg1")->item(0)->textContent;
+        $element = $this->raw_de->getElementsByTagName("arg1")->item(0);
+        if (is_null($element))
+        {
+            throw new InternalErrorException(
+                "getElementsByTagName(\"arg1\")->item(0) is null"
+            );
+        }
+        return trim($element->textContent);
     }
 }
 
