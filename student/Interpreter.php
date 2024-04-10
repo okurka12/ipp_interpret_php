@@ -10,7 +10,8 @@ use IPP\Core\Exception\XMLException;
 use Stringable;
 use ValueError;
 
-/* debug print to stderr, dont call this directly, use dprintinfo or dprint */
+/* debug print to stderr, dont call this directly, use dprintinfo or dprint
+or dlog */
 function dprint_stderr(string $s): void
 {
     /* comment this out before submission */
@@ -19,13 +20,13 @@ function dprint_stderr(string $s): void
     /* https://stackoverflow.com/questions/6079492/how-to-print-a-debug-log */
 }
 
-/* prints information about `v` (uses print_r) prefixed with `s` */
+/* prints information about `v` (uses print_r) prefixed with `s` to stderr */
 function dprintinfo(string $s, mixed $v): void
 {
     dprint_stderr($s . ": " . print_r($v, TRUE) . "\n");
 }
 
-/* prints string version of `v` prefixed with `s` */
+/* prints string version of `v` prefixed with `s` to stderr */
 function dprintstring(string $s, mixed $v): void
 {
     if ($v instanceof Stringable || is_string($v)) {
@@ -42,6 +43,12 @@ function dprintstring(string $s, mixed $v): void
         dprint_stderr("warning: dprintstring called on non-stringable " .
         "variable" . $objinfo . "\n");
     }
+}
+
+/* prints `s` to stderr */
+function dlog(string $s): void
+{
+    dprint_stderr($s);
 }
 
 class Instruction
