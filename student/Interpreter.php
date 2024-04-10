@@ -73,12 +73,19 @@ class Variable
 {
     /* int, bool, string, nil or empty string for yet unknown type */
     private string $type;
-    public string $value;
+    // private string $value;
+    private string $identifier;
 
-    public function __construct()
+    /* GF LF TF */
+    // private string $frame;
+
+    public function __construct(string $identifier)
     {
         $this->type = "";
-        $this->value = "";
+        // $this->value = "";
+        // $this->frame = strtoupper(explode("@", $identifier)[0]);
+        $this->identifier = explode("@", $identifier)[1];
+
     }
 
     public function set_type(string $type): void
@@ -97,6 +104,61 @@ class Variable
     {
         return $this->type;
     }
+
+    public function get_iden(): string
+    {
+        return $this->identifier;
+    }
+}
+
+/******************************************************************************/
+class Frame
+{
+    /** @var array<Variable> */
+    private array $vars;
+
+    public function __construct()
+    {
+        $this->vars = array();
+    }
+
+    public function insert_var(Variable $var): void
+    {
+        array_push($this->vars, $var);
+    }
+
+    public function lookup(string $identifier): Variable|null
+    {
+        foreach ($this->vars as $var) {
+            if ($var->get_iden() === $identifier)
+            {
+                return $var;
+            }
+        }
+        dlog("warning: looked up key not in frame");
+        return null;
+    }
+
+    public function contains(string $identifier): bool
+    {
+        foreach ($this->vars as $var) {
+            if ($var->get_iden() === $identifier)
+            {
+                return TRUE;
+            }
+        }
+        return FALSE;
+
+    }
+}
+
+/******************************************************************************/
+class FrameStack
+{
+    private Frame $gf;
+
+    /* tady jsem skoncil, todo: udelat ten actual frame stack pro lokalni framy
+    atd atd, potom metodu instruction->execute and whatever */
 }
 
 /******************************************************************************/
@@ -148,6 +210,23 @@ class Instruction
         }
         return trim($element->textContent);
     }
+
+    /* compare instructions by order */
+    public function __compareTo(Instruction $other): int
+    {
+        if ($this->order < $other->order)
+        {
+            return -1;
+        }
+        if ($this->order > $other->order)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    // public function execute
+
 }
 
 /******************************************************************************/
@@ -161,8 +240,9 @@ class InstructionList
         $this->list = array();
         foreach($dom->getElementsByTagName("instruction") as $inele) {
             array_push($this->list, new Instruction($inele));
-            dprintstring("instruction", end($this->list));
+            dprintstring("processed instruction", end($this->list));
         }
+        asort($this->list);  // sort by order attribute
         return;
     }
 
@@ -203,6 +283,13 @@ class InstructionList
 
     }
 
+    public function dprint_instructions(): void
+    {
+        foreach ($this->list as $ins) {
+            dprintstring("instruction", (string)$ins);
+        }
+    }
+
 }
 
 /******************************************************************************/
@@ -229,6 +316,7 @@ class Interpreter extends AbstractInterpreter
         // $this->stderr->writeString("stderr");
 
         $ins_list = new InstructionList($dom);
+        $ins_list->dprint_instructions();
         // $labels = $ins_list->get_labels();
         // dprintinfo("labels", $labels);
         $ins_list->check_jumps();
