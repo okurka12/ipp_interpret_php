@@ -5,6 +5,8 @@ namespace IPP\Student;
 use DOMDocument;
 use DOMElement;
 use IPP\Core\AbstractInterpreter;
+use IPP\Core\Exception\InternalErrorException;
+use IPP\Core\Exception\IPPException;
 use IPP\Core\Exception\NotImplementedException;
 use IPP\Core\Exception\XMLException;
 use Stringable;
@@ -49,6 +51,36 @@ function dprintstring(string $s, mixed $v): void
 function dlog(string $s): void
 {
     dprint_stderr($s);
+}
+
+class Variable
+{
+    /* int, bool, string, nil or empty string for yet unknown type */
+    private string $type;
+    public string $value;
+
+    public function __construct()
+    {
+        $this->type = "";
+        $this->value = "";
+    }
+
+    public function set_type(string $type): void
+    {
+        if ($type !== "int" && $type !== "bool" && $type !== "string" &&
+        $type !== "nil")
+        {
+            throw new InternalErrorException(
+                "tried to set invalid type:" . $type
+            );
+        }
+        $this->type = $type;
+    }
+
+    public function get_type(): string
+    {
+        return $this->type;
+    }
 }
 
 class Instruction
