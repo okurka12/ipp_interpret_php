@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- jump to unknown label (expected return code: 52) -->
+<program language="IPPcode24">
+<instruction order="1" opcode="LABEL">
+<arg1 type="label">navesti</arg1>
+</instruction>
+<instruction order="2" opcode="JUMP">
+<arg1 type="label">neexistujicinavesti</arg1>
+</instruction>
+</program>

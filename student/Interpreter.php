@@ -9,8 +9,12 @@ use IPP\Core\Exception\InternalErrorException;
 use IPP\Core\Exception\IPPException;
 use IPP\Core\Exception\NotImplementedException;
 use IPP\Core\Exception\XMLException;
+use IPP\Core\ReturnCode;
 use Stringable;
 use ValueError;
+
+/* FUNCTIONS */
+/******************************************************************************/
 
 /* debug print to stderr, dont call this directly, use dprintinfo or dprint
 or dlog */
@@ -53,6 +57,18 @@ function dlog(string $s): void
     dprint_stderr($s);
 }
 
+/* CLASSES */
+/******************************************************************************/
+
+class UnknownLabelError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("unknown label", ReturnCode::SEMANTIC_ERROR);
+    }
+}
+
+/******************************************************************************/
 class Variable
 {
     /* int, bool, string, nil or empty string for yet unknown type */
@@ -83,6 +99,7 @@ class Variable
     }
 }
 
+/******************************************************************************/
 class Instruction
 {
     /* raw dom element */
@@ -111,10 +128,23 @@ class Instruction
     public function get_content(): string
     {
         /* the label is actually in the child `arg1` element but thats okay */
-        return $this->raw_de->textContent;
+        return trim($this->raw_de->textContent);
+    }
+
+    /* returns a lowercase opcode */
+    public function get_opcode(): string
+    {
+        return $this->opcode;
+    }
+
+    public function get_first_arg_value(): string
+    {
+        return
+        $this->raw_de->getElementsByTagName("arg1")->item(0)->textContent;
     }
 }
 
+/******************************************************************************/
 class InstructionList
 {
     /** @var array<Instruction> */
@@ -144,8 +174,32 @@ class InstructionList
         return $output;
     }
 
+    /* throws exception if there is a jump to unknown label, else does
+    nothing */
+    public function check_jumps(): void
+    {
+        $labels = $this->get_labels();
+        foreach ($this->list as $in)
+        {
+            $is_jump_instruction = $in->get_opcode() === "jump" ||
+            $in->get_opcode() === "jumpifeq" ||
+            $in->get_opcode() === "jumpifneq";
+
+            $desired_label = trim($in->get_first_arg_value());
+            $label_exists = in_array($desired_label, $labels);
+
+            if ($is_jump_instruction && !$label_exists)
+            {
+                dprintstring("unknown label", (string)$in);
+                throw new UnknownLabelError;
+            }
+        }
+
+    }
+
 }
 
+/******************************************************************************/
 class Interpreter extends AbstractInterpreter
 {
     public function execute(): int
@@ -168,9 +222,10 @@ class Interpreter extends AbstractInterpreter
         // $this->stdout->writeString("stdout");
         // $this->stderr->writeString("stderr");
 
-        $k = new InstructionList($dom);
-        $labels = $k->get_labels();
-        dprintinfo("labels", $labels);
+        $ins_list = new InstructionList($dom);
+        // $labels = $ins_list->get_labels();
+        // dprintinfo("labels", $labels);
+        $ins_list->check_jumps();
         return 0;
         // throw new NotImplementedException;
     }
