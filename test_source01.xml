@@ -12,7 +12,7 @@
 <arg1 type="label">while</arg1>
 </instruction>
 <instruction order="4" opcode="JUMPIFEQ">
-<arg1 type="label">end</arg1>
+<arg1 type="label">    end    </arg1>
 <arg2 type="var">GF@counter</arg2>
 <arg3 type="string">aaa</arg3>
 </instruction>
