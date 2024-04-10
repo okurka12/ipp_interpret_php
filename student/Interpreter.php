@@ -191,7 +191,7 @@ class InstructionList
             $in->get_opcode() === "jumpifeq" ||
             $in->get_opcode() === "jumpifneq";
 
-            $desired_label = trim($in->get_first_arg_value());
+            $desired_label = $in->get_first_arg_value();
             $label_exists = in_array($desired_label, $labels);
 
             if ($is_jump_instruction && !$label_exists)
