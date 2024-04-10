@@ -91,6 +91,7 @@ class InstructionList
         return;
     }
 
+    /** @return array<string> */
     public function get_labels(): array
     {
         $output = array();
