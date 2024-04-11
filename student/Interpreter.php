@@ -68,6 +68,25 @@ class UnknownLabelError extends IPPException
     }
 }
 
+class FrameAccessError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("trying to acces non-existent frame",
+        ReturnCode::FRAME_ACCESS_ERROR);
+    }
+}
+
+class VariableAccessError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("trying to acces non-existent variable",
+        ReturnCode::VARIABLE_ACCESS_ERROR);
+    }
+
+}
+
 /******************************************************************************/
 class Variable
 {
@@ -83,8 +102,7 @@ class Variable
     {
         $this->type = "";
         // $this->value = "";
-        // $this->frame = strtoupper(explode("@", $identifier)[0]);
-        $this->identifier = explode("@", $identifier)[1];
+        $this->identifier = $identifier;
 
     }
 
@@ -159,6 +177,101 @@ class FrameStack
 
     /* tady jsem skoncil, todo: udelat ten actual frame stack pro lokalni framy
     atd atd, potom metodu instruction->execute and whatever */
+
+    /** @var array<Frame> */
+    private array $lfstack;
+
+    private Frame|null $tf;
+
+    public function __construct()
+    {
+        $this->gf = new Frame();
+        $this->tf = null;
+        $this->lfstack = array();
+    }
+
+    public function get_gf(): Frame
+    {
+        return $this->gf;
+    }
+    public function get_tf(): Frame
+    {
+        if (is_null($this->tf))
+        {
+            throw new FrameAccessError;
+        }
+        return $this->tf;
+    }
+    public function get_lf(): Frame
+    {
+        if (count($this->lfstack) === 0)
+        {
+            throw new FrameAccessError;
+        }
+        return end($this->lfstack);
+    }
+    public function create_frame(): void
+    {
+        $this->tf = new Frame();
+    }
+    public function push_frame(): void
+    {
+        array_push($this->lfstack, $this->tf);
+    }
+    public function pop_frame(): void
+    {
+        if (count($this->lfstack) === 0)
+        {
+            throw new FrameAccessError;
+        }
+        array_pop($this->lfstack);
+    }
+    public function get_var(string $iden): Variable
+    {
+        $frame = strtoupper(explode("@", $iden)[0]);
+        $identifier = explode("@", $iden)[1];
+
+        $rv = null;
+        if ($frame === "GF")
+        {
+            $rv = $this->gf->lookup($identifier);
+        }
+        if ($frame === "LF")
+        {
+            $fr = $this->get_lf();
+            $rv = $fr->lookup($identifier);
+        }
+        if ($frame === "TF")
+        {
+            $fr = $this->get_tf();
+            $rv = $fr->lookup($identifier);
+        }
+        if (is_null($rv))
+        {
+            throw new VariableAccessError;
+        }
+        return $rv;
+    }
+    public function insert_var(string $iden): void
+    {
+        $frame = strtoupper(explode("@", $iden)[0]);
+        $identifier = explode("@", $iden)[1];
+        $var = new Variable($identifier);
+        if ($frame === "GF")
+        {
+            $this->gf->insert_var($var);
+        }
+        if ($frame === "LF")
+        {
+            $fr = $this->get_lf();
+            $fr->insert_var($var);
+        }
+        if ($frame === "TF")
+        {
+            $fr = $this->get_tf();
+            $fr->insert_var($var);
+        }
+    }
 }
 
 /******************************************************************************/
