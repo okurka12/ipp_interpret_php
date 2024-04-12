@@ -140,9 +140,27 @@ class Frame
         $this->vars = array();
     }
 
+    /** Inserts `var` into the frame, if the frame contains a variable with
+     * the same identifier, the new variable replaces it */
     public function insert_var(Variable $var): void
     {
-        array_push($this->vars, $var);
+        /* if the variable is not present, just append to the end */
+        if (is_null($this->lookup($var->get_iden())))
+        {
+            array_push($this->vars, $var);
+            return;
+        }
+
+        /* else, do a linear search and replace */
+        for ($i = 0; $i < count($this->vars); $i++)
+        {
+            $current_var_iden = $this->vars[$i]->get_iden();
+            if ($current_var_iden === $var->get_iden())
+            {
+                $this->vars[$i] = $var;
+                return;
+            }
+        }
     }
 
     public function lookup(string $identifier): Variable|null
@@ -174,9 +192,6 @@ class Frame
 class FrameStack
 {
     private Frame $gf;
-
-    /* tady jsem skoncil, todo: udelat ten actual frame stack pro lokalni framy
-    atd atd, potom metodu instruction->execute and whatever */
 
     /** @var array<Frame> */
     private array $lfstack;
@@ -226,6 +241,9 @@ class FrameStack
         }
         array_pop($this->lfstack);
     }
+
+    /* todo: catch frameaccesserror and throw variableaccesserror instead
+    (rc 54 vs 55) */
     public function get_var(string $iden): Variable
     {
         $frame = strtoupper(explode("@", $iden)[0]);
@@ -338,7 +356,17 @@ class Instruction
         return 0;
     }
 
-    // public function execute
+    public function execute(FrameStack &$fs): void
+    {
+        dprintstring("executing", $this->opcode . " order: " .
+        (string)$this->order);
+        // todo
+    }
+
+    public function get_order(): int
+    {
+        return $this->order;
+    }
 
 }
 
@@ -384,13 +412,20 @@ class InstructionList
             $in->get_opcode() === "jumpifeq" ||
             $in->get_opcode() === "jumpifneq";
 
-            $desired_label = $in->get_first_arg_value();
-            $label_exists = in_array($desired_label, $labels);
-
-            if ($is_jump_instruction && !$label_exists)
+            if ($is_jump_instruction)
             {
-                dprintstring("unknown label", (string)$in);
-                throw new UnknownLabelError;
+                dlog("checking jump instruction order " .
+                (string)$in->get_order());
+
+                /* only get the first argument if its a jump ins */
+                $desired_label = $in->get_first_arg_value();
+                $label_exists = in_array($desired_label, $labels);
+
+                if (!$label_exists)
+                {
+                    dprintstring("unknown label", (string)$in);
+                    throw new UnknownLabelError;
+                }
             }
         }
 
