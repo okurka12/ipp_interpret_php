@@ -59,7 +59,7 @@ function dlog(string $s): void
 
 /* CLASSES */
 /******************************************************************************/
-
+// MARK:Exceptions
 class UnknownLabelError extends IPPException
 {
     public function __construct()
@@ -88,6 +88,7 @@ class VariableAccessError extends IPPException
 }
 
 /******************************************************************************/
+// MARK:Variable
 class Variable
 {
     /* int, bool, string, nil or empty string for yet unknown type */
@@ -130,6 +131,7 @@ class Variable
 }
 
 /******************************************************************************/
+// MARK:Frame
 class Frame
 {
     /** @var array<Variable> */
@@ -189,6 +191,7 @@ class Frame
 }
 
 /******************************************************************************/
+// MARK:FrameStack
 class FrameStack
 {
     private Frame $gf;
@@ -293,6 +296,7 @@ class FrameStack
 }
 
 /******************************************************************************/
+// MARK:Instruction
 class Instruction
 {
     /* raw dom element */
@@ -371,6 +375,7 @@ class Instruction
 }
 
 /******************************************************************************/
+// MARK:InstructionList
 class InstructionList
 {
     /** @var array<Instruction> */
@@ -441,6 +446,7 @@ class InstructionList
 }
 
 /******************************************************************************/
+// MARK: Interpreter
 class Interpreter extends AbstractInterpreter
 {
     public function execute(): int
