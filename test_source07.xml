@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- order of instructions doesn't match how they are ordered in the file -->
+<!-- order of instructions doesn't match how they are ordered in the file
+(rc: 0) -->
 
 <program language="IPPcode24">
 

@@ -1,4 +1,4 @@
-<!-- invalid: instruction in instruction -->
+<!-- invalid: instruction in instruction (this should be rc 32 ig) -->
 <program language="IPPcode24">
     <instruction order="1" opcode="pushs">
         <instruction order="2" opcode="pushs">
