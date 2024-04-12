@@ -3,7 +3,7 @@
  * IPP - PHP Project Core
  * @author Radim Kocman
  * @author Zbyněk Křivka
- * 
+ *
  * DO NOT MODIFY THIS FILE!
  */
 
