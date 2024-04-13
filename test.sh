@@ -47,6 +47,7 @@ test_file test_source14.xml 54  # non-existent variable in non-existent frame
 test_file test_source15.xml 54  # non-existent variable in non-existent frame
 test_file test_source16.xml 32  # invalid xml
 test_file test_source17.xml 32  # invalid xml
+test_file test_source18.xml 32  # invalid xml
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"
