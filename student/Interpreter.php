@@ -54,7 +54,7 @@ function dprintstring(string $s, mixed $v): void
 /* prints `s` to stderr */
 function dlog(string $s): void
 {
-    dprint_stderr($s);
+    dprint_stderr($s . "\n");
 }
 
 /* CLASSES */
@@ -81,10 +81,18 @@ class VariableAccessError extends IPPException
 {
     public function __construct()
     {
-        parent::__construct("trying to acces non-existent variable",
+        parent::__construct("trying to access non-existent variable",
         ReturnCode::VARIABLE_ACCESS_ERROR);
     }
+}
 
+class VariableRedefinitionError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("trying to redefine variable",
+        ReturnCode::SEMANTIC_ERROR);
+    }
 }
 
 /******************************************************************************/
@@ -93,7 +101,7 @@ class Variable
 {
     /* int, bool, string, nil or empty string for yet unknown type */
     private string $type;
-    // private string $value;
+    private string $value;
     private string $identifier;
 
     /* GF LF TF */
@@ -107,27 +115,37 @@ class Variable
 
     }
 
-    public function set_type(string $type): void
+    /** set both value and type */
+    public function set_value(string $type, string $value): void
     {
+        /* check validity of type just to be sure */
         if ($type !== "int" && $type !== "bool" && $type !== "string" &&
         $type !== "nil")
         {
             throw new InternalErrorException(
-                "tried to set invalid type:" . $type
+                "tried to set invalid type: " . $type
             );
         }
         $this->type = $type;
+        $this->value = $value;
     }
+
 
     public function get_type(): string
     {
         return $this->type;
+    }
+    public function get_value(): string
+    {
+        return $this->value;
     }
 
     public function get_iden(): string
     {
         return $this->identifier;
     }
+    /** TODO: public function copy() to use in something like MOVE GF@b GF@a
+     */
 }
 
 /******************************************************************************/
@@ -247,7 +265,7 @@ class FrameStack
 
     /* todo: catch frameaccesserror and throw variableaccesserror instead
     (rc 54 vs 55) */
-    public function get_var(string $iden): Variable
+    public function lookup(string $iden): Variable
     {
         $frame = strtoupper(explode("@", $iden)[0]);
         $identifier = explode("@", $iden)[1];
@@ -273,10 +291,12 @@ class FrameStack
         }
         return $rv;
     }
-    public function insert_var(string $iden): void
+    public function insert_var(Variable $var_to_insert): void
     {
-        $frame = strtoupper(explode("@", $iden)[0]);
-        $identifier = explode("@", $iden)[1];
+        /** identifier to insert with the frame spec. (eg. LF@a ) */
+        $iden_to_insert = $var_to_insert->get_iden();
+        $frame = strtoupper(explode("@", $iden_to_insert)[0]);
+        $identifier = explode("@", $iden_to_insert)[1];
         $var = new Variable($identifier);
         if ($frame === "GF")
         {
@@ -299,10 +319,10 @@ class FrameStack
 // MARK:Instruction
 class Instruction
 {
-    /* raw dom element */
+    /** raw DOM element of this instruction */
     private DOMElement $raw_de;
 
-    /* instruction opcode, always lowercase */
+    /** instruction opcode, always lowercase */
     private string $opcode;
 
     private int $order;
@@ -328,7 +348,7 @@ class Instruction
         return trim($this->raw_de->textContent);
     }
 
-    /* returns a lowercase opcode */
+    /** @return string a lowercase opcode */
     public function get_opcode(): string
     {
         return $this->opcode;
@@ -341,6 +361,17 @@ class Instruction
         {
             throw new InternalErrorException(
                 "getElementsByTagName(\"arg1\")->item(0) is null"
+            );
+        }
+        return trim($element->textContent);
+    }
+    public function get_second_arg_value(): string
+    {
+        $element = $this->raw_de->getElementsByTagName("arg2")->item(0);
+        if (is_null($element))
+        {
+            throw new InternalErrorException(
+                "getElementsByTagName(\"arg2\")->item(0) is null"
             );
         }
         return trim($element->textContent);
@@ -360,11 +391,73 @@ class Instruction
         return 0;
     }
 
-    public function execute(FrameStack &$fs): void
+    public function execute(FrameStack $fs): void
     {
         dprintstring("executing", $this->opcode . " order: " .
         (string)$this->order);
-        // todo
+
+        // MARK:_move
+        if ($this->get_opcode() === "move")
+        {
+            $target_iden = $this->get_first_arg_value();
+
+            /* get the DOMElement of second argument */
+            $second_arg_de =
+                $this->raw_de->getElementsByTagName("arg2")->item(0);
+            if ( is_null($second_arg_de) )
+            {
+                throw new InternalErrorException("MOVE instruction doesn't" .
+                " have arg2");
+            }
+
+            /* get the DOMNode of the type attribute */
+            $second_arg_type_attr =
+                $second_arg_de->attributes->getNamedItem("type");
+            if ( is_null($second_arg_type_attr) )
+            {
+                throw new InternalErrorException("arg2 of a MOVE " .
+                "instruction has no type attribute");
+            }
+
+            /* get the NodeValue of the type attribute (var int bool string
+            nil) */
+            $src_type = $second_arg_type_attr->nodeValue;
+            if ( is_null($src_type) )
+            {
+                throw new InternalErrorException("type attribute of arg2 " .
+                "of a MOVE instruction has no value");
+            }
+
+            if ($src_type === "var") {
+                throw new NotImplementedException();  /* todo: var copy */
+            }
+
+            $src_value = $this->get_second_arg_value();
+            $target_var = $fs->lookup($target_iden);
+            $target_var->set_value($src_type, $src_value);
+        }
+        // MARK:_defvar
+        else if ($this->get_opcode() === "defvar")
+        {
+            /* identifier containing the frame (like GF@a) */
+            $iden = $this->get_first_arg_value();
+
+            try
+            {
+                $fs->lookup($iden);
+                $var_already_present = TRUE;
+            }
+            catch (FrameAccessError|VariableAccessError)
+            {
+                $var_already_present = FALSE;
+            }
+            if ($var_already_present)
+            {
+                throw new VariableRedefinitionError;
+            }
+            $var = new Variable($iden);
+            $fs->insert_var($var);
+        }
     }
 
     public function get_order(): int
@@ -443,6 +536,14 @@ class InstructionList
         }
     }
 
+    /** executes all the instructions in the list */
+    public function execute(): void
+    {
+        $fs = new FrameStack;
+        foreach ($this->list as $ins) {
+            $ins->execute($fs);
+        }
+    }
 }
 
 /******************************************************************************/
@@ -474,6 +575,7 @@ class Interpreter extends AbstractInterpreter
         // $labels = $ins_list->get_labels();
         // dprintinfo("labels", $labels);
         $ins_list->check_jumps();
+        $ins_list->execute();
         return 0;
         // throw new NotImplementedException;
     }
