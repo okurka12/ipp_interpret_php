@@ -263,9 +263,11 @@ class FrameStack
         array_pop($this->lfstack);
     }
 
-    /* todo: catch frameaccesserror and throw variableaccesserror instead
-    (rc 54 vs 55) */
-    public function lookup(string $iden): Variable
+    /**
+     * This method looks for a variable in the frame stack, but if it doesn't
+     * find it, it may throw a VariableAccessError OR a FrameAccessError
+     */
+    private function lookup_internal(string $iden): Variable
     {
         $frame = strtoupper(explode("@", $iden)[0]);
         $identifier = explode("@", $iden)[1];
@@ -291,6 +293,22 @@ class FrameStack
         }
         return $rv;
     }
+
+    public function lookup(string $identifier): Variable
+    {
+        /* catch frameaccesserror and throw variableaccesserror
+        instead (rc 54 vs 55) */
+        try
+        {
+            $var = $this->lookup_internal($identifier);
+        }
+        catch (FrameAccessError)
+        {
+            throw new VariableAccessError();
+        }
+        return $var;
+    }
+
     public function insert_var(Variable $var_to_insert): void
     {
         /** identifier to insert with the frame spec. (eg. LF@a ) */

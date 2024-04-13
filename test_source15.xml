@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# access a non-existent variable in a non-existent frame (rc 54)
+.IPPcode24
+MOVE LF@a int@5
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="MOVE">
+<arg1 type="var">TF@a</arg1>
+<arg2 type="int">5</arg2>
+</instruction>
+</program>
