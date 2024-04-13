@@ -32,7 +32,7 @@ test_file () {
 test_file test_source00.xml 31
 test_file test_source01.xml 0
 test_file test_source02.xml 54
-test_file test_source03.xml 0  # should be 32 but what do i care
+test_file test_source03.xml 32  # invalid xml
 test_file test_source04.xml 52  # unknown label
 test_file test_source05.xml 52  # unknown label
 test_file test_source06.xml 52  # unknown label
@@ -45,6 +45,8 @@ test_file test_source12.xml 55  # non-existent temporary frame
 test_file test_source13.xml 54  # non-existent global variable
 test_file test_source14.xml 54  # non-existent variable in non-existent frame
 test_file test_source15.xml 54  # non-existent variable in non-existent frame
+test_file test_source16.xml 32  # invalid xml
+test_file test_source17.xml 32  # invalid xml
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

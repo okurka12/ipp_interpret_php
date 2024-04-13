@@ -94,6 +94,15 @@ class VariableRedefinitionError extends IPPException
         ReturnCode::SEMANTIC_ERROR);
     }
 }
+class XMLStructureError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("invalid XML structure",
+        ReturnCode::INVALID_SOURCE_STRUCTURE);
+    }
+
+}
 
 /******************************************************************************/
 // MARK:Variable
@@ -349,6 +358,23 @@ class Instruction
         $this->raw_de = $de;
         $this->opcode = strtolower($de->getAttribute("opcode"));
         $this->order = (int)$de->getAttribute("order");
+        $this->check_xml();
+    }
+
+    /**
+     * checks if self's DOMelement doesnt contain weird children, in case of
+     * error, throws exception, else does nothing
+     */
+    private function check_xml(): void
+    {
+
+        $err1 = count($this->raw_de->getElementsByTagName("instruction")) > 0;
+        $err2 = count($this->raw_de->getElementsByTagName("program")) > 0;
+
+        if ($err1 || $err2)
+        {
+            throw new XMLStructureError;
+        }
     }
 
     public function __toString()
@@ -494,6 +520,7 @@ class InstructionList
 
     public function __construct(DOMDocument $dom)
     {
+        $this->check_xml($dom);
         $this->list = array();
         foreach($dom->getElementsByTagName("instruction") as $inele) {
             array_push($this->list, new Instruction($inele));
@@ -501,6 +528,31 @@ class InstructionList
         }
         asort($this->list);  // sort by order attribute
         return;
+    }
+
+    private function check_xml(DOMDocument $dom): void
+    {
+        $arg1s = $dom->getElementsByTagName("arg1");
+        $arg2s = $dom->getElementsByTagName("arg2");
+        $arg3s = $dom->getElementsByTagName("arg3");
+
+        $arglists = array($arg1s, $arg2s, $arg3s);
+
+        foreach ($arglists as $arglist)
+        {
+            foreach ($arglist as $argelement)
+            {
+                $parent = $argelement->parentNode;
+                if (is_null($parent))
+                {
+                    throw new XMLStructureError;
+                }
+                if ($parent->nodeName !== "instruction")
+                {
+                    throw new XMLStructureError;
+                }
+            }
+        }
     }
 
     /** @return array<string> */
@@ -517,8 +569,10 @@ class InstructionList
         return $output;
     }
 
-    /* throws exception if there is a jump to unknown label, else does
-    nothing */
+    /**
+     * throws exception if there is a jump to unknown label, else does
+     * nothing
+     */
     public function check_jumps(): void
     {
         $labels = $this->get_labels();
@@ -562,6 +616,7 @@ class InstructionList
             $ins->execute($fs);
         }
     }
+
 }
 
 /******************************************************************************/
