@@ -39,5 +39,11 @@ test_file test_source06.xml 52  # unknown label
 test_file test_source07.xml 0
 test_file test_source08.xml 52  # variable redefinition
 test_file test_source09.xml 54  # access to non-existent variable
+test_file test_source10.xml 0
+test_file test_source11.xml 55  # non-existent local frame
+test_file test_source12.xml 55  # non-existent temporary frame
+test_file test_source13.xml 54  # non-existent global variable
+test_file test_source14.xml 54  # non-existent variable in non-existent frame
+
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

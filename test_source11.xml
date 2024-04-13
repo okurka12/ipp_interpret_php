@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# access a non-existent frame (rc 55)
+.IPPcode24
+DEFVAR LF@a
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">LF@a</arg1>
+</instruction>
+</program>
