@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test pushframe and popframe
+# rc: 0
+.IPPcode24
+
+# create frame with variable a and push it
+CREATEFRAME
+DEFVAR TF@a
+PUSHFRAME
+
+# push empty frame over the one with variable a
+CREATEFRAME
+PUSHFRAME
+
+# now pop it, frame with variable a is now back at the top
+POPFRAME
+
+# error
+MOVE LF@a int@5
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="CREATEFRAME">
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">TF@a</arg1>
+</instruction>
+<instruction order="3" opcode="PUSHFRAME">
+</instruction>
+<instruction order="4" opcode="CREATEFRAME">
+</instruction>
+<instruction order="5" opcode="PUSHFRAME">
+</instruction>
+<instruction order="6" opcode="POPFRAME">
+</instruction>
+<instruction order="7" opcode="MOVE">
+<arg1 type="var">LF@a</arg1>
+<arg2 type="int">5</arg2>
+</instruction>
+</program>

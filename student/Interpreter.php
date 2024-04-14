@@ -523,6 +523,11 @@ class Instruction
         {
             $fs->push_frame();
         }
+        // MARK:_popframe
+        else if ($this->get_opcode() === "popframe")
+        {
+            $fs->pop_frame();
+        }
         // MARK:_else
         else
         {

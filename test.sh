@@ -51,6 +51,7 @@ test_file test_source18.xml 32  # invalid xml
 test_file test_source19.xml 0
 test_file test_source20.xml 0
 test_file test_source21.xml 54
+test_file test_source22.xml 0
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"
