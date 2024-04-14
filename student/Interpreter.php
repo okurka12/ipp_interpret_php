@@ -16,6 +16,7 @@ use ValueError;
 // use IPP\Student\umlT;
 
 /* FUNCTIONS */
+// MARK:Functions
 /******************************************************************************/
 
 /* debug print to stderr, dont call this directly, use dprintinfo or dprint
@@ -57,6 +58,14 @@ function dprintstring(string $s, mixed $v): void
 function dlog(string $s): void
 {
     dprint_stderr($s . "\n");
+}
+
+/**
+ * Compare instructions by order
+ */
+function compare_instructions(Instruction $a, Instruction $b): int
+{
+    return $a->comp_by_order($b);
 }
 
 /* CLASSES */
@@ -424,7 +433,7 @@ class Instruction
     }
 
     /* compare instructions by order */
-    public function __compareTo(Instruction $other): int
+    public function comp_by_order(Instruction $other): int
     {
         if ($this->order < $other->order)
         {
@@ -504,6 +513,21 @@ class Instruction
             $var = new Variable($iden);
             $fs->insert_var($var);
         }
+        // MARK:_createframe
+        else if ($this->get_opcode() === "createframe")
+        {
+            $fs->create_frame();
+        }
+        // MARK:_pushframe
+        else if ($this->get_opcode() === "pushframe")
+        {
+            $fs->push_frame();
+        }
+        // MARK:_else
+        else
+        {
+            throw new NotImplementedException;
+        }
     }
 
     public function get_order(): int
@@ -528,7 +552,10 @@ class InstructionList
             array_push($this->list, new Instruction($inele));
             dprintstring("processed instruction", end($this->list));
         }
-        asort($this->list);  // sort by order attribute
+
+        /* sort by order attribute */
+        usort($this->list, "IPP\Student\compare_instructions");
+
         return;
     }
 
@@ -606,7 +633,7 @@ class InstructionList
     public function dprint_instructions(): void
     {
         foreach ($this->list as $ins) {
-            dprintstring("instruction", (string)$ins);
+            dprintstring("IL-instruction", (string)$ins);
         }
     }
 
