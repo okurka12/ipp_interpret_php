@@ -512,7 +512,16 @@ class Instruction
                 throw new NotImplementedException();  /* todo: var copy */
             }
 
-            $src_value = $this->get_second_arg_value();
+            if ($src_type === "string")
+            {
+                $src_value = $this->unescape_string(
+                    $this->get_second_arg_value()
+                );
+            }
+            else
+            {
+                $src_value = $this->get_second_arg_value();
+            }
             $target_var = $fs->lookup($target_iden);
             $target_var->set_value($src_type, $src_value);
         }
@@ -538,17 +547,15 @@ class Instruction
             $var = new Variable($iden);
             $fs->insert_var($var);
         }
-        // MARK:_createframe
+        // MARK:_createframe,
         else if ($this->get_opcode() === "createframe")
         {
             $fs->create_frame();
         }
-        // MARK:_pushframe
         else if ($this->get_opcode() === "pushframe")
         {
             $fs->push_frame();
         }
-        // MARK:_popframe
         else if ($this->get_opcode() === "popframe")
         {
             $fs->pop_frame();
@@ -567,17 +574,22 @@ class Instruction
                 $text = $this->get_first_arg_value();
                 $inter->print($this->unescape_string($text));
             }
+            else if ($type == "var")
+            {
+                $var = $fs->lookup($this->get_first_arg_value());
+                $text = $var->get_value();
+                $inter->print($text);
+            }
             else
             {
                 throw new NotImplementedException;
             }
         }
-        // MARK:_dprint
+        // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint")
         {
             dlog("warning: dprint does nothing");
         }
-        // MARK:_break
         else if ($this->get_opcode() === "break")
         {
             dlog("warning: break does nothing");
