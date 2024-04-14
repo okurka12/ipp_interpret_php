@@ -11,13 +11,21 @@ TASK=2
 STUDENT_DIR=student
 SCRIPT=interpret.php
 
+MESSAGE=Did you remove ./student/umlT.php ?
+
 all: check
 
 pack: student/*
 	cd $(STUDENT_DIR) && zip -r $(LOGIN).zip  * -x __MACOSX/* .git/* && mv $(LOGIN).zip ../
+	@echo Alert!
+	@echo -n $(MESSAGE)
+	@read q
 
 check: pack vendor
 	./is_it_ok.sh $(LOGIN).zip $(TEMP_DIR) $(TASK)
+	@echo Alert!
+	@echo $(MESSAGE)
+
 
 run-help: interpret.php
 	if [ "${HOSTNAME}" = "merlin.fit.vutbr.cz" ]; then php8.3 $(SCRIPT) --help; else php $(SCRIPT) --help; fi

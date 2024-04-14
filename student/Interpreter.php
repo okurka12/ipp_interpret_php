@@ -13,6 +13,8 @@ use IPP\Core\ReturnCode;
 use Stringable;
 use ValueError;
 
+// use IPP\Student\umlT;
+
 /* FUNCTIONS */
 /******************************************************************************/
 
@@ -623,6 +625,8 @@ class InstructionList
 // MARK: Interpreter
 class Interpreter extends AbstractInterpreter
 {
+    // use umlT;
+
     public function execute(): int
     {
         // TODO: Start your code here
