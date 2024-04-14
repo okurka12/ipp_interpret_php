@@ -10,6 +10,7 @@ use IPP\Core\Exception\IPPException;
 use IPP\Core\Exception\NotImplementedException;
 use IPP\Core\Exception\XMLException;
 use IPP\Core\ReturnCode;
+use IPP\Core\Settings;
 use Stringable;
 use ValueError;
 
@@ -446,7 +447,56 @@ class Instruction
         return 0;
     }
 
-    public function execute(FrameStack $fs): void
+    /**
+     * gets the 'type' attribute of `n`th argument
+     */
+    public function get_type_attr(int $n): string
+    {
+        /* get the DOMElement of second argument */
+        $tagname = "arg" . (string)$n;
+        $arg_de =
+        $this->raw_de->getElementsByTagName($tagname)->item(0);
+        if ( is_null($arg_de) )
+        {
+            throw new InternalErrorException("couldn't find " . $tagname);
+        }
+
+        /* get the DOMNode of the type attribute */
+        $type_attr =
+            $arg_de->attributes->getNamedItem("type");
+        if ( is_null($type_attr) )
+        {
+            throw new InternalErrorException("missing type attribute of " .
+            $tagname);
+        }
+
+        /* get the NodeValue of the type attribute (var int bool string
+        nil) */
+        $type = $type_attr->nodeValue;
+        if ( is_null($type) )
+        {
+            throw new InternalErrorException("type attribute of arg" .
+                "has no value");
+        }
+
+        return $type;
+
+    }
+
+    private function unescape_string(string $s): string
+    {
+        $pattern = '/\\\\([0-9]{1,3})/';
+        $output = preg_replace_callback($pattern, function($matches) {
+            return chr(intval($matches[1]));
+        }, $s);
+        if (is_null($output))
+        {
+            return $s;
+        }
+        return $output;
+    }
+
+    public function execute(FrameStack $fs, Interpreter $inter): void
     {
         dprintstring("executing", $this->opcode . " order: " .
         (string)$this->order);
@@ -456,32 +506,7 @@ class Instruction
         {
             $target_iden = $this->get_first_arg_value();
 
-            /* get the DOMElement of second argument */
-            $second_arg_de =
-                $this->raw_de->getElementsByTagName("arg2")->item(0);
-            if ( is_null($second_arg_de) )
-            {
-                throw new InternalErrorException("MOVE instruction doesn't" .
-                " have arg2");
-            }
-
-            /* get the DOMNode of the type attribute */
-            $second_arg_type_attr =
-                $second_arg_de->attributes->getNamedItem("type");
-            if ( is_null($second_arg_type_attr) )
-            {
-                throw new InternalErrorException("arg2 of a MOVE " .
-                "instruction has no type attribute");
-            }
-
-            /* get the NodeValue of the type attribute (var int bool string
-            nil) */
-            $src_type = $second_arg_type_attr->nodeValue;
-            if ( is_null($src_type) )
-            {
-                throw new InternalErrorException("type attribute of arg2 " .
-                "of a MOVE instruction has no value");
-            }
+            $src_type = $this->get_type_attr(2);
 
             if ($src_type === "var") {
                 throw new NotImplementedException();  /* todo: var copy */
@@ -527,6 +552,35 @@ class Instruction
         else if ($this->get_opcode() === "popframe")
         {
             $fs->pop_frame();
+        }
+        // MARK:_write
+        else if ($this->get_opcode() === "write")
+        {
+            $type = $this->get_type_attr(1);
+
+            if ($type == "int")
+            {
+                $inter->print($this->get_first_arg_value());
+            }
+            else if ($type == "string")
+            {
+                $text = $this->get_first_arg_value();
+                $inter->print($this->unescape_string($text));
+            }
+            else
+            {
+                throw new NotImplementedException;
+            }
+        }
+        // MARK:_dprint
+        else if ($this->get_opcode() === "dprint")
+        {
+            dlog("warning: dprint does nothing");
+        }
+        // MARK:_break
+        else if ($this->get_opcode() === "break")
+        {
+            dlog("warning: break does nothing");
         }
         // MARK:_else
         else
@@ -643,13 +697,14 @@ class InstructionList
     }
 
     /** executes all the instructions in the list */
-    public function execute(): void
+    public function execute(Interpreter $inter): void
     {
         $fs = new FrameStack;
         foreach ($this->list as $ins) {
-            $ins->execute($fs);
+            $ins->execute($fs, $inter);
         }
     }
+
 
 }
 
@@ -664,16 +719,16 @@ class Interpreter extends AbstractInterpreter
         // TODO: Start your code here
         // Check \IPP\Core\AbstractInterpreter for predefined I/O objects:
 
-        try  // catch ValueError
-        {
-            $dom = $this->source->getDOMDocument();
-        }
+            try  // catch ValueError
+            {
+                $dom = $this->source->getDOMDocument();
+            }
 
-        /* this exception is uncaught elsewhere and it happens when the source
-        file is empty */
-        catch (ValueError) {
-            throw new XMLException("empty xml");
-        }
+            /* this exception is uncaught elsewhere and it happens when the source
+            file is empty */
+            catch (ValueError) {
+                throw new XMLException("empty xml");
+            }
 
         // $val = $this->input->readString();
         // $this->stdout->writeString("stdout");
@@ -684,8 +739,13 @@ class Interpreter extends AbstractInterpreter
         // $labels = $ins_list->get_labels();
         // dprintinfo("labels", $labels);
         $ins_list->check_jumps();
-        $ins_list->execute();
+        $ins_list->execute($this);
         return 0;
         // throw new NotImplementedException;
+    }
+
+    public function print(string $s): void
+    {
+        $this->stdout->writeString($s);
     }
 }
