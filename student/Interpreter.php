@@ -124,6 +124,16 @@ class IPPTypeError extends IPPException
     }
 }
 
+// todo: before submission comment out ippcore NotImplementedException
+// and uncomment this
+// class NotImplementedException extends IPPException
+// {
+//     public function __construct()
+//     {
+//         parent::__construct("not implemented", 0);
+//     }
+// }
+
 /******************************************************************************/
 // MARK:Variable
 class Variable
@@ -138,6 +148,7 @@ class Variable
 
     public function __construct(string $identifier)
     {
+        dlog("constructing variable " . $identifier);
         $this->type = "";
         // $this->value = "";
         $this->identifier = $identifier;
@@ -338,6 +349,9 @@ class FrameStack
         return $var;
     }
 
+    /**
+     * insert `var_to_insert` whose identifier contains the frame specification
+     */
     public function insert_var(Variable $var_to_insert): void
     {
         /** identifier to insert with the frame spec. (eg. LF@a ) */
@@ -345,6 +359,10 @@ class FrameStack
         $frame = strtoupper(explode("@", $iden_to_insert)[0]);
         $identifier = explode("@", $iden_to_insert)[1];
         $var = new Variable($identifier);
+        // $var->set_value(
+        //     $var_to_insert->get_type(),
+        //     $var_to_insert->get_value()
+        // );
         if ($frame === "GF")
         {
             $this->gf->insert_var($var);
@@ -580,22 +598,33 @@ class Instruction
         {
             $target_iden = $this->get_first_arg_value();
 
+            /* int, bool, string, nil, label, type, var */
             $src_type = $this->get_type_attr(2);
 
-            if ($src_type === "var") {
-                throw new NotImplementedException();  /* todo: var copy */
-            }
-
+            /* if its a string, unescape it */
             if ($src_type === "string")
             {
                 $src_value = $this->unescape_string(
                     $this->get_second_arg_value()
                 );
             }
+
+            /* if its not a string, copy the raw value */
             else
             {
                 $src_value = $this->get_second_arg_value();
             }
+
+            /* finally, if its a var, obtain both type and value from the
+            source variable (and overwrite anythinbg that was set above) */
+            if ($src_type === "var") {
+                $src_var = $this->get_nth_arg_value(2);
+                $src_var = $fs->lookup($src_var);
+                $src_type = $src_var->get_type();
+                $src_value = $src_var->get_value();
+
+            }
+
             $target_var = $fs->lookup($target_iden);
             $target_var->set_value($src_type, $src_value);
         }

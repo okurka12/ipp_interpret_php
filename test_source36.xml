@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# copy variables with MOVE
+# rc: 0
+.IPPcode24
+
+DEFVAR GF@a
+DEFVAR GF@b
+DEFVAR GF@c
+DEFVAR GF@d
+MOVE GF@a int@1
+
+ADD GF@b GF@a int@1
+
+MOVE GF@c GF@b
+MOVE GF@d GF@c
+
+WRITE string@zde-by-melo-byt-cislo-2:\032  # \032 je mezera
+WRITE GF@d
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="3" opcode="DEFVAR">
+<arg1 type="var">GF@c</arg1>
+</instruction>
+<instruction order="4" opcode="DEFVAR">
+<arg1 type="var">GF@d</arg1>
+</instruction>
+<instruction order="5" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="int">1</arg2>
+</instruction>
+<instruction order="6" opcode="ADD">
+<arg1 type="var">GF@b</arg1>
+<arg2 type="var">GF@a</arg2>
+<arg3 type="int">1</arg3>
+</instruction>
+<instruction order="7" opcode="MOVE">
+<arg1 type="var">GF@c</arg1>
+<arg2 type="var">GF@b</arg2>
+</instruction>
+<instruction order="8" opcode="MOVE">
+<arg1 type="var">GF@d</arg1>
+<arg2 type="var">GF@c</arg2>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-cislo-2:\032</arg1>
+</instruction>
+<instruction order="10" opcode="WRITE">
+<arg1 type="var">GF@d</arg1>
+</instruction>
+<instruction order="11" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>
