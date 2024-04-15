@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test jumpifeq for two variables
+# rc: 0
+.IPPcode24
+
+DEFVAR GF@sixtynine-one
+DEFVAR GF@sixtynine-two
+MOVE GF@sixtynine-one int@69
+MOVE GF@sixtynine-two int@69
+
+WRITE string@zde-by-melo-byt-true:\032
+
+JUMPIFEQ print-true GF@sixtynine-one GF@sixtynine-two
+WRITE string@false
+JUMP end
+
+LABEL print-true
+
+WRITE string@true
+
+LABEL end
+
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@sixtynine-one</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@sixtynine-two</arg1>
+</instruction>
+<instruction order="3" opcode="MOVE">
+<arg1 type="var">GF@sixtynine-one</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="4" opcode="MOVE">
+<arg1 type="var">GF@sixtynine-two</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="6" opcode="JUMPIFEQ">
+<arg1 type="label">print-true</arg1>
+<arg2 type="var">GF@sixtynine-one</arg2>
+<arg3 type="var">GF@sixtynine-two</arg3>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">false</arg1>
+</instruction>
+<instruction order="8" opcode="JUMP">
+<arg1 type="label">end</arg1>
+</instruction>
+<instruction order="9" opcode="LABEL">
+<arg1 type="label">print-true</arg1>
+</instruction>
+<instruction order="10" opcode="WRITE">
+<arg1 type="string">true</arg1>
+</instruction>
+<instruction order="11" opcode="LABEL">
+<arg1 type="label">end</arg1>
+</instruction>
+<instruction order="12" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>
