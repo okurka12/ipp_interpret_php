@@ -184,8 +184,32 @@ class Variable
     {
         return $this->identifier;
     }
-    /** TODO: public function copy() to use in something like MOVE GF@b GF@a
+
+    /**
+     * if this <  other, returns -1
+     * if this == other, returns  0
+     * if this >  other, returns  1
      */
+    public function compare_int(Variable $other): int
+    {
+        if ($this->get_type() !== "int" || $other->get_type() !== "int")
+        {
+            throw new IPPTypeError("tried to compare non-integer variables as
+            integers");
+        }
+        $a = (int)$this->get_value();
+        $b = (int)$this->get_value();
+        if ($a < $b)
+        {
+            return -1;
+        }
+        if ($a > $b)
+        {
+            return 1;
+        }
+        return 0;
+
+    }
 }
 
 /******************************************************************************/
@@ -533,6 +557,11 @@ class Instruction
         return $output;
     }
 
+    /**
+     * gets the contents of the XML argn tag
+     * note: if the XML attribute type is 'var', this method returns the
+     * identifier of the var
+     */
     public function get_nth_arg_value(int $n): string
     {
         if ($n === 1)
@@ -580,6 +609,42 @@ class Instruction
         }
         return $value;
 
+    }
+
+    /**
+     * gets the nth arg value, but unlike `get_nth_arg_value`,
+     * if its a var, it looks for the variable in `fs` and gets its value
+     * note: if its a string constant, un-escapes it
+     */
+    private function get_nth_arg_value_resolve(int $n, FrameStack $fs): string
+    {
+        $type_attr = $this->get_type_attr($n);
+        $xml_value = $this->get_nth_arg_value($n);
+        if ($type_attr === "var")
+        {
+            $var = $fs->lookup($xml_value);
+            return $var->get_value();
+        }
+        if ($type_attr === "string")
+        {
+            return $this->unescape_string($xml_value);
+        }
+        return $xml_value;
+    }
+    /**
+     * gets the nth arg value, but unlike `get_type_attr`,
+     * if its a var, it looks for the variable in `fs` and gets its type
+     */
+    private function get_nth_arg_type_resolve(int $n, FrameStack $fs): string
+    {
+        $type_attr = $this->get_type_attr($n);
+        $xml_value = $this->get_nth_arg_value($n);
+        if ($type_attr === "var")
+        {
+            $var = $fs->lookup($xml_value);
+            return $var->get_type();
+        }
+        return $type_attr;
     }
 
     /**
@@ -728,9 +793,37 @@ class Instruction
             $target_var->set_value("int", (string)$result);
 
         }
+        // MARK:_jump
         else if ($this->get_opcode() === "jump")
         {
             $jump_to_label = $this->get_nth_arg_value(1);
+        }
+        else if ($this->get_opcode() === "jumpifeq")
+        {
+            $first_type = $this->get_nth_arg_type_resolve(2, $fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $fs);
+            $first_value = $this->get_nth_arg_value_resolve(2, $fs);
+            $second_value = $this->get_nth_arg_value_resolve(3, $fs);
+
+            $one_is_nil = $first_type === "nil" || $second_type === "nil";
+            $should_jump = FALSE;
+
+            if (!$one_is_nil && $first_type !== $second_type)
+            {
+                throw new IPPTypeError((string)$this);
+            }
+            if (!$one_is_nil)
+            {
+                if ($first_type === "int")
+                {
+                    $should_jump = $first_value === $second_value;
+                }
+            }
+
+            if ($one_is_nil || $should_jump)
+            {
+                $jump_to_label = $this->get_nth_arg_value(1);
+            }
         }
         else if ($this->get_opcode() === "label")
         {
