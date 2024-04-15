@@ -515,7 +515,7 @@ class Instruction
         return $output;
     }
 
-    private function get_nth_arg_value(int $n): string
+    public function get_nth_arg_value(int $n): string
     {
         if ($n === 1)
         {
@@ -564,10 +564,16 @@ class Instruction
 
     }
 
-    public function execute(FrameStack $fs, Interpreter $inter): void
+    /**
+     * executes instruction and returns a label that should be jumped to,
+     * if there is no jump, returns empty string
+     */
+    public function execute(FrameStack $fs, Interpreter $inter): string
     {
         dprintstring("executing", $this->opcode . " order: " .
         (string)$this->order);
+
+        $jump_to_label = "";
 
         // MARK:_move
         if ($this->get_opcode() === "move")
@@ -687,12 +693,21 @@ class Instruction
             $src2_value = $this->get_int_operand(3, $fs);
 
             dlog("dividing " . (string)$src1_value . " / " .
-                (string)$src2_value);
+            (string)$src2_value);
             $result = intdiv($src1_value, $src2_value);
 
             $target_var->set_value("int", (string)$result);
 
         }
+        else if ($this->get_opcode() === "jump")
+        {
+            $jump_to_label = $this->get_nth_arg_value(1);
+        }
+        else if ($this->get_opcode() === "label")
+        {
+            /* do nothing */
+        }
+
         // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint")
         {
@@ -707,6 +722,8 @@ class Instruction
         {
             throw new NotImplementedException;
         }
+
+        return $jump_to_label;
     }
 
     public function get_order(): int
@@ -816,12 +833,41 @@ class InstructionList
         }
     }
 
+    /**
+     * executes instructions starting from `label` (if empty, starts from
+     * the first instruction)
+     * if there occurs a jump, returns a label that should be jumped to
+     * if it reaches the end, returns empty string
+     */
+    private function execute_from(Interpreter $inter, FrameStack $fs, string $label): string
+    {
+        $reached_label = $label === "";
+
+        foreach ($this->list as $ins) {
+            if (!$reached_label)
+            {
+                $reached_label = $ins->get_opcode() === "label" && $ins->get_nth_arg_value(1) === $label;
+                continue;
+            }
+            $jumpto = $ins->execute($fs, $inter);
+            if ($jumpto !== "")
+            {
+                return $jumpto;
+            }
+        }
+        return "";
+    }
+
     /** executes all the instructions in the list */
     public function execute(Interpreter $inter): void
     {
         $fs = new FrameStack;
-        foreach ($this->list as $ins) {
-            $ins->execute($fs, $inter);
+        $jumpto = "";
+        $done = FALSE;
+        while (!$done)
+        {
+            $jumpto = $this->execute_from($inter, $fs, $jumpto);
+            $done = $jumpto === "";
         }
     }
 
