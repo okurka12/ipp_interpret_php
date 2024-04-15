@@ -3,6 +3,8 @@
 # originally from repository for the parse.py assignment
 # (https://github.com/okurka12/ipp_project)
 
+# o k u r k a 1 2
+
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
 COLOR_RESET='\033[0m'

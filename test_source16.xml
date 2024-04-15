@@ -14,3 +14,4 @@ MOVE GF@a int@5
 <arg2 type="int">5</arg2>
 </instruction>
 </program>
+
