@@ -653,6 +653,7 @@ class Instruction
                 throw new NotImplementedException;
             }
         }
+        // MARK:add,mul,idiv
         else if ($this->get_opcode() === "add")
         {
             $target_var = $fs->lookup($this->get_first_arg_value());
@@ -675,6 +676,19 @@ class Instruction
             dlog("multiplying " . (string)$src1_value . " * " .
                 (string)$src2_value);
             $result = $src1_value * $src2_value;
+
+            $target_var->set_value("int", (string)$result);
+
+        }
+        else if ($this->get_opcode() === "idiv")
+        {
+            $target_var = $fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $fs);
+            $src2_value = $this->get_int_operand(3, $fs);
+
+            dlog("dividing " . (string)$src1_value . " / " .
+                (string)$src2_value);
+            $result = intdiv($src1_value, $src2_value);
 
             $target_var->set_value("int", (string)$result);
 
