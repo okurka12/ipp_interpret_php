@@ -515,6 +515,55 @@ class Instruction
         return $output;
     }
 
+    private function get_nth_arg_value(int $n): string
+    {
+        if ($n === 1)
+        {
+            return $this->get_first_arg_value();
+        }
+        if ($n === 2)
+        {
+            return $this->get_second_arg_value();
+        }
+        if ($n === 3)
+        {
+            return $this->get_third_arg_value();
+        }
+        throw new InternalErrorException("tried to get " . (string)$n .
+        "argument");
+    }
+
+    /**
+     * interpret `n`'th operand (var/int) as integer
+     */
+    private function get_int_operand(int $n, FrameStack $fs): int
+    {
+
+        $type = $this->get_type_attr($n);
+        if ($type !== "var" && $type !== "int")
+        {
+            throw new IPPTypeError((string)$this);
+        }
+
+
+        /* extract src1 value */
+        if ($type === "var")
+        {
+            $var = $fs->lookup($this->get_nth_arg_value($n));
+            if ($var->get_type() !== "int")
+            {
+                throw new IPPTypeError((string)$this);
+            }
+            $value = (int)$var->get_value();
+        }
+        else
+        {
+            $value = (int)$this->get_nth_arg_value($n);
+        }
+        return $value;
+
+    }
+
     public function execute(FrameStack $fs, Interpreter $inter): void
     {
         dprintstring("executing", $this->opcode . " order: " .
@@ -607,49 +656,25 @@ class Instruction
         else if ($this->get_opcode() === "add")
         {
             $target_var = $fs->lookup($this->get_first_arg_value());
-            $src1_type = $this->get_type_attr(2);
-            $src2_type = $this->get_type_attr(3);
+            $src1_value = $this->get_int_operand(2, $fs);
+            $src2_value = $this->get_int_operand(3, $fs);
 
-            /* check type attr (var|int) */
-            $src1_type_ok = $src1_type === "var" || $src1_type === "int";
-            $src2_type_ok = $src2_type === "var" || $src2_type === "int";
-            if (!$src1_type_ok || !$src2_type_ok)
-            {
-                throw new IPPTypeError((string)$this);
-            }
-
-            /* extract src1 value */
-            if ($src1_type === "var")
-            {
-                $src1_var = $fs->lookup($this->get_second_arg_value());
-                if ($src1_var->get_type() !== "int")
-                {
-                    throw new IPPTypeError((string)$this);
-                }
-                $src1_value = (int)$src1_var->get_value();
-            }
-            else
-            {
-                $src1_value = (int)$this->get_second_arg_value();
-            }
-
-            /* extract src2 value */
-            if ($src2_type === "var")
-            {
-                $src2_var = $fs->lookup($this->get_third_arg_value());
-                if ($src2_var->get_type() !== "int")
-                {
-                    throw new IPPTypeError((string)$this);
-                }
-                $src2_value = (int)$src2_var->get_value();
-            }
-            else
-            {
-                $src2_value = (int)$this->get_third_arg_value();
-            }
-
-            dlog("adding " . (string)$src1_value . " + " . (string)$src2_value);
+            dlog("adding " . (string)$src1_value . " + " .
+                (string)$src2_value);
             $result = $src1_value + $src2_value;
+
+            $target_var->set_value("int", (string)$result);
+
+        }
+        else if ($this->get_opcode() === "mul")
+        {
+            $target_var = $fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $fs);
+            $src2_value = $this->get_int_operand(3, $fs);
+
+            dlog("multiplying " . (string)$src1_value . " * " .
+                (string)$src2_value);
+            $result = $src1_value * $src2_value;
 
             $target_var->set_value("int", (string)$result);
 
