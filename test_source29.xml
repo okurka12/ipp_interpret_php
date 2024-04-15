@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# sum two integer variables 3 + 7 and put result in the first variable
+# rc: 0
+.IPPcode24
+DEFVAR GF@a
+DEFVAR GF@b
+MOVE GF@a int@3
+MOVE GF@b int@4
+ADD GF@a GF@a GF@b
+WRITE string@tady-by-melo-byt-cislo-7:\032
+WRITE GF@a
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="3" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="int">3</arg2>
+</instruction>
+<instruction order="4" opcode="MOVE">
+<arg1 type="var">GF@b</arg1>
+<arg2 type="int">4</arg2>
+</instruction>
+<instruction order="5" opcode="ADD">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="var">GF@a</arg2>
+<arg3 type="var">GF@b</arg3>
+</instruction>
+<instruction order="6" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-cislo-7:\032</arg1>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="8" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

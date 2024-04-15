@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# wrong constant operands for add
+# rc: 53
+.IPPcode24
+
+DEFVAR GF@a
+
+ADD GF@a string@ahoj bool@true
+
+WRITE string@tady-to-by-nemelo-ani-probehnout:\032  # \032 je mezera
+WRITE GF@c
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="ADD">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">ahoj</arg2>
+<arg3 type="bool">true</arg3>
+</instruction>
+<instruction order="3" opcode="WRITE">
+<arg1 type="string">tady-to-by-nemelo-ani-probehnout:\032</arg1>
+</instruction>
+<instruction order="4" opcode="WRITE">
+<arg1 type="var">GF@c</arg1>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

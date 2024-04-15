@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# sum two integer constants
+# rc: 0
+.IPPcode24
+DEFVAR GF@a
+ADD GF@a int@3 int@4
+WRITE string@tady-by-melo-byt-cislo-7:\032
+WRITE GF@a
+WRITE string@\010
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="ADD">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="int">3</arg2>
+<arg3 type="int">4</arg3>
+</instruction>
+<instruction order="3" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-cislo-7:\032</arg1>
+</instruction>
+<instruction order="4" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

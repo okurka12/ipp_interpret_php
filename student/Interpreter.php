@@ -115,6 +115,14 @@ class XMLStructureError extends IPPException
     }
 
 }
+class IPPTypeError extends IPPException
+{
+    public function __construct(string $when)
+    {
+        parent::__construct("invalid operand types: " . $when,
+        ReturnCode::OPERAND_TYPE_ERROR);
+    }
+}
 
 /******************************************************************************/
 // MARK:Variable
@@ -432,6 +440,17 @@ class Instruction
         }
         return trim($element->textContent);
     }
+    public function get_third_arg_value(): string
+    {
+        $element = $this->raw_de->getElementsByTagName("arg3")->item(0);
+        if (is_null($element))
+        {
+            throw new InternalErrorException(
+                "getElementsByTagName(\"arg3\")->item(0) is null"
+            );
+        }
+        return trim($element->textContent);
+    }
 
     /* compare instructions by order */
     public function comp_by_order(Instruction $other): int
@@ -547,7 +566,7 @@ class Instruction
             $var = new Variable($iden);
             $fs->insert_var($var);
         }
-        // MARK:_createframe,
+        // MARK:_createframe
         else if ($this->get_opcode() === "createframe")
         {
             $fs->create_frame();
@@ -584,6 +603,56 @@ class Instruction
             {
                 throw new NotImplementedException;
             }
+        }
+        else if ($this->get_opcode() === "add")
+        {
+            $target_var = $fs->lookup($this->get_first_arg_value());
+            $src1_type = $this->get_type_attr(2);
+            $src2_type = $this->get_type_attr(3);
+
+            /* check type attr (var|int) */
+            $src1_type_ok = $src1_type === "var" || $src1_type === "int";
+            $src2_type_ok = $src2_type === "var" || $src2_type === "int";
+            if (!$src1_type_ok || !$src2_type_ok)
+            {
+                throw new IPPTypeError((string)$this);
+            }
+
+            /* extract src1 value */
+            if ($src1_type === "var")
+            {
+                $src1_var = $fs->lookup($this->get_second_arg_value());
+                if ($src1_var->get_type() !== "int")
+                {
+                    throw new IPPTypeError((string)$this);
+                }
+                $src1_value = (int)$src1_var->get_value();
+            }
+            else
+            {
+                $src1_value = (int)$this->get_second_arg_value();
+            }
+
+            /* extract src2 value */
+            if ($src2_type === "var")
+            {
+                $src2_var = $fs->lookup($this->get_third_arg_value());
+                if ($src2_var->get_type() !== "int")
+                {
+                    throw new IPPTypeError((string)$this);
+                }
+                $src2_value = (int)$src2_var->get_value();
+            }
+            else
+            {
+                $src2_value = (int)$this->get_third_arg_value();
+            }
+
+            dlog("adding " . (string)$src1_value . " + " . (string)$src2_value);
+            $result = $src1_value + $src2_value;
+
+            $target_var->set_value("int", (string)$result);
+
         }
         // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint")
