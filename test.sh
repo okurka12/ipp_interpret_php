@@ -65,7 +65,7 @@ test_file test_source17.xml 32  # invalid xml
 test_file test_source18.xml 32  # invalid xml
 test_file test_source19.xml 0
 test_file test_source20.xml 0
-test_file test_source21.xml 54
+test_file test_source21.xml 54  # access to non-existent variable
 test_file test_source22.xml 0
 test_file test_source23.xml 0
 test_file test_source24.xml 0
@@ -76,8 +76,8 @@ test_file test_source28.xml 0
 test_file test_source29.xml 0
 test_file test_source30.xml 0
 test_file test_source31.xml 0
-test_file test_source32.xml 53
-test_file test_source33.xml 53
+test_file test_source32.xml 53  # type error for ADD
+test_file test_source33.xml 53  # type error for ADD
 test_file test_source34.xml 0
 test_file test_source35.xml 0
 test_file test_source36.xml 0
@@ -85,6 +85,7 @@ test_file test_source37.xml 0
 test_file test_source38.xml 0
 test_file test_source39.xml 0
 test_file test_source40.xml 0
+test_file test_source41.xml 0
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

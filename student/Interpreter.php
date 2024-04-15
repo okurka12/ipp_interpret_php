@@ -798,7 +798,8 @@ class Instruction
         {
             $jump_to_label = $this->get_nth_arg_value(1);
         }
-        else if ($this->get_opcode() === "jumpifeq")
+        else if ($this->get_opcode() === "jumpifeq" ||
+        $this->get_opcode() == "jumpifneq")
         {
             $first_type = $this->get_nth_arg_type_resolve(2, $fs);
             $second_type = $this->get_nth_arg_type_resolve(3, $fs);
@@ -806,7 +807,7 @@ class Instruction
             $second_value = $this->get_nth_arg_value_resolve(3, $fs);
 
             $one_is_nil = $first_type === "nil" || $second_type === "nil";
-            $should_jump = FALSE;
+            $values_are_equal = FALSE;
 
             if (!$one_is_nil && $first_type !== $second_type)
             {
@@ -816,11 +817,17 @@ class Instruction
             {
                 if ($first_type === "int")
                 {
-                    $should_jump = $first_value === $second_value;
+                    $values_are_equal = $first_value === $second_value;
                 }
             }
 
-            if ($one_is_nil || $should_jump)
+            $should_jump = $one_is_nil || $values_are_equal;
+
+            if ($should_jump && $this->get_opcode() === "jumpifeq")
+            {
+                $jump_to_label = $this->get_nth_arg_value(1);
+            }
+            if (!$should_jump && $this->get_opcode() === "jumpifneq")
             {
                 $jump_to_label = $this->get_nth_arg_value(1);
             }
