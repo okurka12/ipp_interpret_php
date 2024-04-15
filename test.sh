@@ -4,10 +4,13 @@
 # (https://github.com/okurka12/ipp_project)
 
 RED='\033[0;31m'
+YELLOW='\033[0;33m'
 COLOR_RESET='\033[0m'
 
 TEST_COUNT=0
 PASSED_TESTS=0
+
+SHOW_STDOUT=true
 
 # $1 - test value, $2 - expected, $3 - name
 # also increments test_count
@@ -24,8 +27,18 @@ test_val () {
 
 # $1 - file to test, $2 - expected return code
 test_file () {
-    cat "$1" | php interpret.php --source=$1 > /dev/null 2> /dev/null
+    if $SHOW_STDOUT; then
+        STDOUT=$(cat "$1" | php interpret.php --source=$1 2> /dev/null)
+    else
+        STDOUT=$(cat "$1" | php interpret.php --source=$1 > /dev/null 2> /dev/null)
+    fi
     test_val $? $2 "$1"
+    if $SHOW_STDOUT; then
+        echo -n "    stdout: "
+        echo -n -e "$YELLOW"
+        echo "$STDOUT" | sed "s/^/    /"
+        echo -n -e "$COLOR_RESET"
+    fi
 }
 
 ################################################################################
