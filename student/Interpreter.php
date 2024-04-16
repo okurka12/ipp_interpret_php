@@ -122,6 +122,9 @@ class IPPTypeError extends IPPException {
         );
     }
 }
+/**
+ * return code: 57
+ */
 class IPPValueError extends IPPException {
     public function __construct(string $when) {
         parent::__construct(
@@ -130,11 +133,25 @@ class IPPValueError extends IPPException {
         );
     }
 }
+/**
+ * return code: 56
+ */
 class CallStackEmptyError extends IPPException {
     public function __construct() {
         parent::__construct(
             "RETURN was called when call stack was empty",
             ReturnCode::VALUE_ERROR
+        );
+    }
+}
+/**
+ * return code: 58
+ */
+class IPPStringError extends IPPException {
+    public function __construct() {
+        parent::__construct(
+            "bad string operation",
+            ReturnCode::STRING_OPERATION_ERROR
         );
     }
 }
@@ -971,10 +988,21 @@ class Instruction {
             $src2_value = $this->get_int_operand(3, $rt->fs);
 
             dlog("subtracting " . (string)$src1_value . " - " .
-                (string)$src2_value);
+            (string)$src2_value);
             $result = $src1_value - $src2_value;
 
             $target_var->set_value("int", (string)$result);
+        }
+        // MARK:_int2char
+        else if ($this->get_opcode() === "int2char") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src_value = $this->get_int_operand(2, $rt->fs);
+            $result = mb_chr($src_value);
+            if ($result === false) {
+                throw new IPPStringError;
+            }
+            $target_var->set_value("string", $result);
+
         }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test INT2CHAR
+# rc: 0
+.ippcode24
+DEFVAR GF@a
+
+# 97 is ascii a
+MOVE GF@a int@97
+
+INT2CHAR GF@a GF@a
+
+WRITE string@tady-by-melo-byt-a:\032
+WRITE GF@a
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="int">97</arg2>
+</instruction>
+<instruction order="3" opcode="INT2CHAR">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="var">GF@a</arg2>
+</instruction>
+<instruction order="4" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-a:\032</arg1>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="6" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>
