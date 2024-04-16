@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Original source code:
-# try to write bool variables and constants
+# try to write bool variables and constants, use NOT
 # rc: 0
 .IPPcode24
 DEFVAR GF@tru
@@ -14,18 +14,31 @@ WRITE string@zde-by-melo-byt-true:\032
 WRITE GF@tru
 WRITE string@\010
 
-WRITE string@zde-by-melo-byt-false:\032
-WRITE GF@fals
-WRITE string@\010
-
 WRITE string@zde-by-melo-byt-true:\032
 WRITE bool@true
+WRITE string@\010
+
+DEFVAR GF@not-fals
+MOVE GF@not-fals bool@false
+NOT GF@not-fals GF@not-fals
+WRITE string@zde-by-melo-byt-true:\032
+WRITE GF@not-fals
+WRITE string@\010
+
+DEFVAR GF@not-tru
+MOVE GF@not-tru bool@true
+NOT GF@not-tru GF@not-tru
+WRITE string@zde-by-melo-byt-false:\032
+WRITE GF@not-tru
+WRITE string@\010
+
+WRITE string@zde-by-melo-byt-false:\032
+WRITE GF@fals
 WRITE string@\010
 
 WRITE string@zde-by-melo-byt-false:\032
 WRITE bool@false
 WRITE string@\010
-
 
 -->
 <program language="IPPcode24">
@@ -56,30 +69,70 @@ WRITE string@\010
 <arg1 type="string">\010</arg1>
 </instruction>
 <instruction order="9" opcode="WRITE">
-<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
 </instruction>
 <instruction order="10" opcode="WRITE">
-<arg1 type="var">GF@fals</arg1>
+<arg1 type="bool">true</arg1>
 </instruction>
 <instruction order="11" opcode="WRITE">
 <arg1 type="string">\010</arg1>
 </instruction>
-<instruction order="12" opcode="WRITE">
-<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
+<instruction order="12" opcode="DEFVAR">
+<arg1 type="var">GF@not-fals</arg1>
 </instruction>
-<instruction order="13" opcode="WRITE">
-<arg1 type="bool">true</arg1>
+<instruction order="13" opcode="MOVE">
+<arg1 type="var">GF@not-fals</arg1>
+<arg2 type="bool">false</arg2>
 </instruction>
-<instruction order="14" opcode="WRITE">
-<arg1 type="string">\010</arg1>
+<instruction order="14" opcode="NOT">
+<arg1 type="var">GF@not-fals</arg1>
+<arg2 type="var">GF@not-fals</arg2>
 </instruction>
 <instruction order="15" opcode="WRITE">
-<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
 </instruction>
 <instruction order="16" opcode="WRITE">
-<arg1 type="bool">false</arg1>
+<arg1 type="var">GF@not-fals</arg1>
 </instruction>
 <instruction order="17" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="18" opcode="DEFVAR">
+<arg1 type="var">GF@not-tru</arg1>
+</instruction>
+<instruction order="19" opcode="MOVE">
+<arg1 type="var">GF@not-tru</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="20" opcode="NOT">
+<arg1 type="var">GF@not-tru</arg1>
+<arg2 type="var">GF@not-tru</arg2>
+</instruction>
+<instruction order="21" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="22" opcode="WRITE">
+<arg1 type="var">GF@not-tru</arg1>
+</instruction>
+<instruction order="23" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="24" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="25" opcode="WRITE">
+<arg1 type="var">GF@fals</arg1>
+</instruction>
+<instruction order="26" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="27" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="28" opcode="WRITE">
+<arg1 type="bool">false</arg1>
+</instruction>
+<instruction order="29" opcode="WRITE">
 <arg1 type="string">\010</arg1>
 </instruction>
 </program>

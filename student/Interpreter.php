@@ -681,9 +681,14 @@ class Instruction {
                 $src_value = $this->unescape_string(
                     $this->get_second_arg_value()
                 );
+
+            /** if its a bool, make sure its lowercase */
+            } else if ($src_type === "bool") {
+                $src_value = strtolower($this->get_second_arg_value());
             }
 
-            /* if its not a string, copy the raw value */ else {
+            /** if its not a string or bool, copy the raw value */
+            else {
                 $src_value = $this->get_second_arg_value();
             }
 
@@ -748,8 +753,7 @@ class Instruction {
             } else {
                 throw new NotImplementedException;
             }
-        }
-        else if ($this->get_opcode() === "concat") {
+        } else if ($this->get_opcode() === "concat") {
             $s1type = $this->get_nth_arg_type_resolve(2, $rt->fs);
             $s2type = $this->get_nth_arg_type_resolve(3, $rt->fs);
             if ($s1type !== "string" || $s2type !== "string") {
@@ -771,6 +775,22 @@ class Instruction {
             $source_type = $source_var->get_type();
             $target_var->set_value("string", $source_type);
         }
+
+        else if ($this->get_opcode() === "not") {
+            $stype = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $sval = strtolower($this->get_nth_arg_value_resolve(2, $rt->fs));
+            $tvar = $rt->fs->lookup($this->get_first_arg_value());
+            if ($stype !== "bool") {
+                throw new IPPTypeError((string)$this);
+            }
+            if (strcmp($sval, "true") === 0) {
+                $tvar->set_value("bool", "false");
+            } else {
+                $tvar->set_value("bool", "true");
+            }
+
+        }
+
         // MARK:_add,_mul,_idiv
         else if ($this->get_opcode() === "add") {
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
