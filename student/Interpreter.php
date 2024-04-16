@@ -118,6 +118,14 @@ class IPPTypeError extends IPPException {
         );
     }
 }
+class IPPValueError extends IPPException {
+    public function __construct(string $when) {
+        parent::__construct(
+            "invalid operand value: " . $when,
+            ReturnCode::OPERAND_VALUE_ERROR
+        );
+    }
+}
 class CallStackEmptyError extends IPPException {
     public function __construct() {
         parent::__construct(
@@ -789,6 +797,19 @@ class Instruction {
         } else if ($this->get_opcode() === "break") {
             dlog("warning: break does nothing");
         }
+        // MARK:_exit
+        else if ($this->get_opcode() === "exit") {
+            $type = $this->get_nth_arg_type_resolve(1, $rt->fs);
+            if ($type !== "int") {
+                throw new IPPTypeError((string)$this);
+            }
+            $return_code = (int)($this->get_nth_arg_value_resolve(1, $rt->fs));
+            if ($return_code < 0 || $return_code > 9) {
+                throw new IPPValueError((string)$this . " value:" .
+                    (string)$return_code);
+            }
+            exit($return_code);
+        }
         // MARK:_else
         else {
             throw new NotImplementedException;
@@ -954,8 +975,10 @@ class Interpreter extends AbstractInterpreter {
             $dom = $this->source->getDOMDocument();
         }
 
-        /* this exception is uncaught elsewhere and it happens when the source
-            file is empty */
+        /**
+         * this exception is uncaught elsewhere and it happens when the source
+         * file is empty
+         */
         catch (ValueError) {
             throw new XMLException("empty xml");
         }
