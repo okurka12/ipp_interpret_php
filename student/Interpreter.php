@@ -776,6 +776,7 @@ class Instruction {
             $target_var->set_value("string", $source_type);
         }
 
+        // MARK:_not
         else if ($this->get_opcode() === "not") {
             $stype = $this->get_nth_arg_type_resolve(2, $rt->fs);
             $sval = strtolower($this->get_nth_arg_value_resolve(2, $rt->fs));
@@ -789,6 +790,44 @@ class Instruction {
                 $tvar->set_value("bool", "true");
             }
 
+        }
+        else if ($this->get_opcode() === "and") {
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = strtolower(
+                $this->get_nth_arg_value_resolve(2, $rt->fs)
+            );
+            $second_value = strtolower(
+                $this->get_nth_arg_value_resolve(3, $rt->fs)
+            );
+            $tvar = $rt->fs->lookup($this->get_first_arg_value());
+            if ($first_type !== "bool" || $second_type !== "bool") {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($first_value === "true" && $second_value === "true") {
+                $tvar->set_value("bool", "true");
+            } else {
+                $tvar->set_value("bool", "false");
+            }
+        }
+        else if ($this->get_opcode() === "or") {
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = strtolower(
+                $this->get_nth_arg_value_resolve(2, $rt->fs)
+            );
+            $second_value = strtolower(
+                $this->get_nth_arg_value_resolve(3, $rt->fs)
+            );
+            $tvar = $rt->fs->lookup($this->get_first_arg_value());
+            if ($first_type !== "bool" || $second_type !== "bool") {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($first_value === "true" || $second_value === "true") {
+                $tvar->set_value("bool", "true");
+            } else {
+                $tvar->set_value("bool", "false");
+            }
         }
 
         // MARK:_add,_mul,_idiv

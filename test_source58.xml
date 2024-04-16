@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Original source code:
-# try to write bool variables and constants, use NOT
+# try to write bool variables and constants, use NOT, AND, OR
 # rc: 0
 .IPPcode24
 DEFVAR GF@tru
@@ -23,6 +23,32 @@ MOVE GF@not-fals bool@false
 NOT GF@not-fals GF@not-fals
 WRITE string@zde-by-melo-byt-true:\032
 WRITE GF@not-fals
+WRITE string@\010
+
+DEFVAR GF@and-true
+AND GF@and-true bool@true GF@tru
+WRITE string@zde-by-melo-byt-true:\032
+WRITE GF@and-true
+WRITE string@\010
+
+DEFVAR GF@or-true
+OR GF@or-true bool@false GF@tru
+WRITE string@zde-by-melo-byt-true:\032
+WRITE GF@or-true
+WRITE string@\010
+
+######################################
+
+DEFVAR GF@or-false
+OR GF@or-false bool@false GF@fals
+WRITE string@zde-by-melo-byt-false:\032
+WRITE GF@or-false
+WRITE string@\010
+
+DEFVAR GF@and-false
+AND GF@and-false bool@false GF@tru
+WRITE string@zde-by-melo-byt-false:\032
+WRITE GF@and-false
 WRITE string@\010
 
 DEFVAR GF@not-tru
@@ -98,41 +124,109 @@ WRITE string@\010
 <arg1 type="string">\010</arg1>
 </instruction>
 <instruction order="18" opcode="DEFVAR">
+<arg1 type="var">GF@and-true</arg1>
+</instruction>
+<instruction order="19" opcode="AND">
+<arg1 type="var">GF@and-true</arg1>
+<arg2 type="bool">true</arg2>
+<arg3 type="var">GF@tru</arg3>
+</instruction>
+<instruction order="20" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="21" opcode="WRITE">
+<arg1 type="var">GF@and-true</arg1>
+</instruction>
+<instruction order="22" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="23" opcode="DEFVAR">
+<arg1 type="var">GF@or-true</arg1>
+</instruction>
+<instruction order="24" opcode="OR">
+<arg1 type="var">GF@or-true</arg1>
+<arg2 type="bool">false</arg2>
+<arg3 type="var">GF@tru</arg3>
+</instruction>
+<instruction order="25" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="26" opcode="WRITE">
+<arg1 type="var">GF@or-true</arg1>
+</instruction>
+<instruction order="27" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="28" opcode="DEFVAR">
+<arg1 type="var">GF@or-false</arg1>
+</instruction>
+<instruction order="29" opcode="OR">
+<arg1 type="var">GF@or-false</arg1>
+<arg2 type="bool">false</arg2>
+<arg3 type="var">GF@fals</arg3>
+</instruction>
+<instruction order="30" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="31" opcode="WRITE">
+<arg1 type="var">GF@or-false</arg1>
+</instruction>
+<instruction order="32" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="33" opcode="DEFVAR">
+<arg1 type="var">GF@and-false</arg1>
+</instruction>
+<instruction order="34" opcode="AND">
+<arg1 type="var">GF@and-false</arg1>
+<arg2 type="bool">false</arg2>
+<arg3 type="var">GF@tru</arg3>
+</instruction>
+<instruction order="35" opcode="WRITE">
+<arg1 type="string">zde-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="36" opcode="WRITE">
+<arg1 type="var">GF@and-false</arg1>
+</instruction>
+<instruction order="37" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="38" opcode="DEFVAR">
 <arg1 type="var">GF@not-tru</arg1>
 </instruction>
-<instruction order="19" opcode="MOVE">
+<instruction order="39" opcode="MOVE">
 <arg1 type="var">GF@not-tru</arg1>
 <arg2 type="bool">true</arg2>
 </instruction>
-<instruction order="20" opcode="NOT">
+<instruction order="40" opcode="NOT">
 <arg1 type="var">GF@not-tru</arg1>
 <arg2 type="var">GF@not-tru</arg2>
 </instruction>
-<instruction order="21" opcode="WRITE">
+<instruction order="41" opcode="WRITE">
 <arg1 type="string">zde-by-melo-byt-false:\032</arg1>
 </instruction>
-<instruction order="22" opcode="WRITE">
+<instruction order="42" opcode="WRITE">
 <arg1 type="var">GF@not-tru</arg1>
 </instruction>
-<instruction order="23" opcode="WRITE">
+<instruction order="43" opcode="WRITE">
 <arg1 type="string">\010</arg1>
 </instruction>
-<instruction order="24" opcode="WRITE">
+<instruction order="44" opcode="WRITE">
 <arg1 type="string">zde-by-melo-byt-false:\032</arg1>
 </instruction>
-<instruction order="25" opcode="WRITE">
+<instruction order="45" opcode="WRITE">
 <arg1 type="var">GF@fals</arg1>
 </instruction>
-<instruction order="26" opcode="WRITE">
+<instruction order="46" opcode="WRITE">
 <arg1 type="string">\010</arg1>
 </instruction>
-<instruction order="27" opcode="WRITE">
+<instruction order="47" opcode="WRITE">
 <arg1 type="string">zde-by-melo-byt-false:\032</arg1>
 </instruction>
-<instruction order="28" opcode="WRITE">
+<instruction order="48" opcode="WRITE">
 <arg1 type="bool">false</arg1>
 </instruction>
-<instruction order="29" opcode="WRITE">
+<instruction order="49" opcode="WRITE">
 <arg1 type="string">\010</arg1>
 </instruction>
 </program>
