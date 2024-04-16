@@ -998,7 +998,7 @@ class Instruction {
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $src_value = $this->get_int_operand(2, $rt->fs);
             $result = mb_chr($src_value);
-            if ($result === false) {
+            if ($result == false) {
                 throw new IPPStringError;
             }
             $target_var->set_value("string", $result);
