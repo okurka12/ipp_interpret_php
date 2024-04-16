@@ -741,6 +741,8 @@ class Instruction {
                     $text = $var->get_value();
                 }
                 $rt->inter->print($text);
+            } else if ($type === "bool") {
+                $rt->inter->print($this->get_first_arg_value());
             } else if ($type === "nil") {
                 /* do nothing */
             } else {
