@@ -6,7 +6,11 @@ Date: 2024-04-08
 
 ## prerequisites
 
-- have php8.3 (when building from source, use `./configure --with-openssl`)
+- have php8.3 (when building from source, use
+`./configure --with-openssl --enable-mbstring`)
+  - `--with-openssl` is needed for `composer.phar` to work
+  - `--enable-mbstring` is needed for mb functions like `mb_chr`
+(also note that debian package `libonig-dev` is needed for that)
 - run `php composer.phar install`
 
 ## how to use
