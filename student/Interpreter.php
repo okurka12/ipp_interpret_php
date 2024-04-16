@@ -16,6 +16,12 @@ use ValueError;
 
 // use IPP\Student\umlT;
 
+/** This is a random string for creating pseudo-labels
+ * the source program must not have a label containing this string
+ * also note that this string must not contain an underscore
+ */
+define("SALT", "2wL9CBGltRHRV26mPlTiVsmy1bfPMvY3BJaVvasmqADc288G1r");
+
 /* FUNCTIONS */
 // MARK:Functions
 /******************************************************************************/
@@ -123,6 +129,14 @@ class IPPTypeError extends IPPException
         ReturnCode::OPERAND_TYPE_ERROR);
     }
 }
+class CallStackEmptyError extends IPPException
+{
+    public function __construct()
+    {
+        parent::__construct("RETURN was called when call stack was empty",
+        ReturnCode::VALUE_ERROR);
+    }
+}
 
 // todo: before submission comment out ippcore NotImplementedException
 // and uncomment this
@@ -133,6 +147,35 @@ class IPPTypeError extends IPPException
 //         parent::__construct("not implemented", 0);
 //     }
 // }
+
+/******************************************************************************/
+// MARK:CallStack
+class CallStack
+{
+    /** @var array<string> */
+    private array $cs;
+
+    public function __construct()
+    {
+        $this->cs = array();
+    }
+    public function push(string $s): void
+    {
+        dprintstring("pushed to callstack", $s);
+        array_push($this->cs, $s);
+    }
+    public function pop(): string
+    {
+        if (count($this->cs) === 0)
+        {
+            throw new CallStackEmptyError;
+        }
+        $return_value = end($this->cs);
+        array_pop($this->cs);
+        dprintstring("popped from callstack", $return_value);
+        return $return_value;
+    }
+}
 
 /******************************************************************************/
 // MARK:Variable
@@ -651,7 +694,7 @@ class Instruction
      * executes instruction and returns a label that should be jumped to,
      * if there is no jump, returns empty string
      */
-    public function execute(FrameStack $fs, Interpreter $inter): string
+    public function execute(FrameStack $fs, CallStack $cs, Interpreter $inter): string
     {
         dprintstring("executing", $this->opcode . " order: " .
         (string)$this->order);
@@ -847,7 +890,16 @@ class Instruction
         {
             /* do nothing */
         }
-
+        // MARK:_call, _return
+        else if ($this->get_opcode() === "call")
+        {
+            $cs->push(SALT . "_" . (string)$this->get_order());
+            $jump_to_label = $this->get_nth_arg_value(1);
+        }
+        else if ($this->get_opcode() === "return")
+        {
+            $jump_to_label = $cs->pop();
+        }
         // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint")
         {
@@ -978,23 +1030,50 @@ class InstructionList
      * the first instruction)
      * if there occurs a jump, returns a label that should be jumped to
      * if it reaches the end, returns empty string
+     *
+     * note: if `label` contains SALT, it is expected to have a format
+     * `SALT_n` where `n` is the order number of the instruction from which
+     * to execute
      */
-    private function execute_from(Interpreter $inter, FrameStack $fs, string $label): string
+    private function execute_from(Interpreter $inter, FrameStack $fs, CallStack $cs, string $label): string
     {
-        $reached_label = $label === "";
 
-        foreach ($this->list as $ins) {
-            if (!$reached_label)
+        if (str_contains($label, SALT))
+        {
+            $execute_from = (int)(explode("_", $label)[1]);
+            $reached_ins = FALSE;
+            foreach ($this->list as $ins)
             {
-                $reached_label = $ins->get_opcode() === "label" && $ins->get_nth_arg_value(1) === $label;
-                continue;
-            }
-            $jumpto = $ins->execute($fs, $inter);
-            if ($jumpto !== "")
-            {
-                return $jumpto;
+                if (!$reached_ins)
+                {
+                    $reached_ins = $ins->get_order() === $execute_from;
+                    continue;
+                }
+                $jumpto = $ins->execute($fs, $cs, $inter);
+                if ($jumpto !== "")
+                {
+                    return $jumpto;
+                }
             }
         }
+        else
+        {
+            $reached_label = $label === "";
+
+            foreach ($this->list as $ins)
+            {
+                if (!$reached_label)
+                {
+                    $reached_label = $ins->get_opcode() === "label" && $ins->get_nth_arg_value(1) === $label;
+                    continue;
+                }
+                $jumpto = $ins->execute($fs, $cs, $inter);
+                if ($jumpto !== "")
+                {
+                    return $jumpto;
+                }
+            }
+    }
         return "";
     }
 
@@ -1002,11 +1081,12 @@ class InstructionList
     public function execute(Interpreter $inter): void
     {
         $fs = new FrameStack;
+        $cs = new CallStack;
         $jumpto = "";
         $done = FALSE;
         while (!$done)
         {
-            $jumpto = $this->execute_from($inter, $fs, $jumpto);
+            $jumpto = $this->execute_from($inter, $fs, $cs, $jumpto);
             $done = $jumpto === "";
         }
     }

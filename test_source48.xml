@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# jumpifeq comparing with nil (wtf i hate this project)
+# rc: 0
+.IPPcode24
+
+JUMP after-functions
+
+LABEL my-function
+WRITE string@volany:ahoj-ja-jsem-funkce\010
+RETURN
+WRITE string@volany:ahoj-ja-jsem-dead-code-za-returnem\010
+
+LABEL after-functions
+
+WRITE string@volajici:ted-zavolam-funkci\010
+CALL my-function
+WRITE string@volajici:funkce-byla-zavolana\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="JUMP">
+<arg1 type="label">after-functions</arg1>
+</instruction>
+<instruction order="2" opcode="LABEL">
+<arg1 type="label">my-function</arg1>
+</instruction>
+<instruction order="3" opcode="WRITE">
+<arg1 type="string">volany:ahoj-ja-jsem-funkce\010</arg1>
+</instruction>
+<instruction order="4" opcode="RETURN">
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">volany:ahoj-ja-jsem-dead-code-za-returnem\010</arg1>
+</instruction>
+<instruction order="6" opcode="LABEL">
+<arg1 type="label">after-functions</arg1>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">volajici:ted-zavolam-funkci\010</arg1>
+</instruction>
+<instruction order="8" opcode="CALL">
+<arg1 type="label">my-function</arg1>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">volajici:funkce-byla-zavolana\010</arg1>
+</instruction>
+</program>
