@@ -135,6 +135,18 @@ class CallStackEmptyError extends IPPException {
     }
 }
 
+/**
+ * return code: 56
+ */
+class ProgramStackEmptyError extends IPPException {
+    public function __construct() {
+        parent::__construct(
+            "POPS was called when program stack was empty",
+            ReturnCode::VALUE_ERROR
+        );
+    }
+}
+
 // todo: before submission comment out ippcore NotImplementedException
 // and uncomment this
 // class NotImplementedException extends IPPException
@@ -151,14 +163,16 @@ class RunTime {
     public FrameStack $fs;
     public CallStack $cs;
     public Interpreter $inter;
+    public ProgramStack $ps;
 
     /**
-     * Initializes framestack and callstack, but interpreter needs to be set
-     * via setter
+     * Initializes framestack, callstack and program stack,
+     * but interpreter needs to be set via setter
      */
     public function __construct() {
         $this->fs = new FrameStack;
         $this->cs = new CallStack;
+        $this->ps = new ProgramStack;
     }
 
     public function set_interpreter(Interpreter $inter): void {
@@ -187,6 +201,28 @@ class CallStack {
         $return_value = end($this->cs);
         array_pop($this->cs);
         dprintstring("popped from callstack", $return_value);
+        return $return_value;
+    }
+}
+
+/******************************************************************************/
+// MARK:ProgramStack
+class ProgramStack {
+    /** @var array<Variable> */
+    private array $cs;
+
+    public function __construct() {
+        $this->cs = array();
+    }
+    public function push(Variable $var): void {
+        array_push($this->cs, $var);
+    }
+    public function pop(): Variable {
+        if (count($this->cs) === 0) {
+            throw new ProgramStackEmptyError;
+        }
+        $return_value = end($this->cs);
+        array_pop($this->cs);
         return $return_value;
     }
 }
@@ -800,6 +836,19 @@ class Instruction {
             $jump_to_label = $this->get_nth_arg_value(1);
         } else if ($this->get_opcode() === "return") {
             $jump_to_label = $rt->cs->pop();
+        }
+        // MARK:_pushs, _pops
+        else if ($this->get_opcode() === "pushs") {
+            $type = $this->get_nth_arg_type_resolve(1, $rt->fs);
+            $value = $this->get_nth_arg_value_resolve(1, $rt->fs);
+            $var = new Variable("");
+            $var->set_value($type, $value);
+            $rt->ps->push($var);
+        } else if ($this->get_opcode() === "pops") {
+            $var_iden = $this->get_nth_arg_value(1);
+            $target_var = $rt->fs->lookup($var_iden);
+            $srcv = $rt->ps->pop();  // source variable (from stack)
+            $target_var->set_value($srcv->get_type(), $srcv->get_value());
         }
         // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint") {

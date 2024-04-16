@@ -99,6 +99,8 @@ test_file test_source51.xml 57  # test EXIT with invalid operand value
 test_file test_source52.xml 7  # test EXIT value 7 chosen arbitrarily
 test_file test_source53.xml 0
 test_file test_source54.xml 0
+test_file test_source55.xml 0
+test_file test_source56.xml 56
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

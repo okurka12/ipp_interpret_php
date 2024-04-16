@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test POPS when stack is empty
+# rc: 56
+.IPPcode24
+DEFVAR GF@a
+MOVE GF@a string@ahoj
+PUSHS GF@a
+MOVE GF@a string@cau
+
+DEFVAR GF@b
+POPS GF@b
+WRITE string@tady-by-melo-byt-ahoj:\032
+WRITE GF@b
+WRITE string@\010
+
+DEFVAR GF@c
+POPS GF@c
+
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">ahoj</arg2>
+</instruction>
+<instruction order="3" opcode="PUSHS">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="4" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">cau</arg2>
+</instruction>
+<instruction order="5" opcode="DEFVAR">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="6" opcode="POPS">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-ahoj:\032</arg1>
+</instruction>
+<instruction order="8" opcode="WRITE">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="10" opcode="DEFVAR">
+<arg1 type="var">GF@c</arg1>
+</instruction>
+<instruction order="11" opcode="POPS">
+<arg1 type="var">GF@c</arg1>
+</instruction>
+</program>
