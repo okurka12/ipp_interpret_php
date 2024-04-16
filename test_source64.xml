@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test GETCHAR
+# rc: 0
+.ippcode24
+
+DEFVAR GF@a
+DEFVAR GF@ahoj
+DEFVAR GF@two
+
+MOVE GF@ahoj string@ahoj
+MOVE GF@two int@2
+GETCHAR GF@a GF@ahoj GF@two
+
+WRITE string@tady-by-melo-byt-o:\032
+WRITE GF@a
+WRITE string@\010
+
+GETCHAR GF@a string@+ěščřžýáíé GF@two
+
+WRITE string@tady-by-melo-byt-š:\032
+WRITE GF@a
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@ahoj</arg1>
+</instruction>
+<instruction order="3" opcode="DEFVAR">
+<arg1 type="var">GF@two</arg1>
+</instruction>
+<instruction order="4" opcode="MOVE">
+<arg1 type="var">GF@ahoj</arg1>
+<arg2 type="string">ahoj</arg2>
+</instruction>
+<instruction order="5" opcode="MOVE">
+<arg1 type="var">GF@two</arg1>
+<arg2 type="int">2</arg2>
+</instruction>
+<instruction order="6" opcode="GETCHAR">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="var">GF@ahoj</arg2>
+<arg3 type="var">GF@two</arg3>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-o:\032</arg1>
+</instruction>
+<instruction order="8" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="10" opcode="GETCHAR">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">+ěščřžýáíé</arg2>
+<arg3 type="var">GF@two</arg3>
+</instruction>
+<instruction order="11" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-š:\032</arg1>
+</instruction>
+<instruction order="12" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="13" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

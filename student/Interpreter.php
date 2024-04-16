@@ -699,7 +699,7 @@ class Instruction {
                     $this->get_second_arg_value()
                 );
 
-            /** if its a bool, make sure its lowercase */
+                /** if its a bool, make sure its lowercase */
             } else if ($src_type === "bool") {
                 $src_value = strtolower($this->get_second_arg_value());
             }
@@ -806,7 +806,6 @@ class Instruction {
             } else {
                 $tvar->set_value("bool", "true");
             }
-
         }
         // MARK:_and
         else if ($this->get_opcode() === "and") {
@@ -856,8 +855,7 @@ class Instruction {
             $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $one_is_nil = $first_type === "nil" || $second_type === "nil";
-            if ($first_type !== $second_type || $one_is_nil)
-            {
+            if ($first_type !== $second_type || $one_is_nil) {
                 throw new IPPTypeError((string)$this);
             }
             if ($first_type === "string") {
@@ -881,7 +879,6 @@ class Instruction {
             } else {  // just to be sure
                 $target_var->set_value("bool", "false");
             }
-
         }
         // MARK:_gt
         else if ($this->get_opcode() === "gt") {
@@ -891,8 +888,7 @@ class Instruction {
             $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $one_is_nil = $first_type === "nil" || $second_type === "nil";
-            if ($first_type !== $second_type || $one_is_nil)
-            {
+            if ($first_type !== $second_type || $one_is_nil) {
                 throw new IPPTypeError((string)$this);
             }
 
@@ -917,7 +913,6 @@ class Instruction {
             } else {  // just to be sure
                 $target_var->set_value("bool", "false");
             }
-
         }
         // MARK:_eq
         else if ($this->get_opcode() === "eq") {
@@ -927,8 +922,7 @@ class Instruction {
             $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $one_is_nil = $first_type === "nil" || $second_type === "nil";
-            if ($first_type !== $second_type && !$one_is_nil)
-            {
+            if ($first_type !== $second_type && !$one_is_nil) {
                 dlog($first_type . " " . $second_type . " " . $one_is_nil);
                 throw new IPPTypeError((string)$this);
             }
@@ -948,7 +942,6 @@ class Instruction {
             } else {  // just to be sure
                 $target_var->set_value("bool", "false");
             }
-
         }
 
         // MARK:_add,_mul,_idiv
@@ -988,7 +981,7 @@ class Instruction {
             $src2_value = $this->get_int_operand(3, $rt->fs);
 
             dlog("subtracting " . (string)$src1_value . " - " .
-            (string)$src2_value);
+                (string)$src2_value);
             $result = $src1_value - $src2_value;
 
             $target_var->set_value("int", (string)$result);
@@ -1002,7 +995,6 @@ class Instruction {
                 throw new IPPStringError;
             }
             $target_var->set_value("string", $result);
-
         }
         // MARK:_stri2int
         else if ($this->get_opcode() === "stri2int") {
@@ -1021,11 +1013,11 @@ class Instruction {
 
             dlog("stri2int investigating " .
                 mb_substr($src1_value, $src2_value, 1));
-                $result = mb_ord(mb_substr($src1_value, $src2_value, 1));
-                $target_var->set_value("int", (string)$result);
+            $result = mb_ord(mb_substr($src1_value, $src2_value, 1));
+            $target_var->set_value("int", (string)$result);
 
-            }
-        else if ($this->get_opcode() === "strlen") {
+        // MARK:_strlen
+        } else if ($this->get_opcode() === "strlen") {
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $src_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
             $src_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
@@ -1033,6 +1025,22 @@ class Instruction {
                 throw new IPPTypeError((string)$this);
             }
             $target_var->set_value("int", (string)mb_strlen($src_value));
+        }
+        else if ($this->get_opcode() === "getchar") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $src1_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
+            if ($src1_type !== "string") {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($src2_value > mb_strlen($src1_value) - 1) {
+                throw new IPPStringError;
+            }
+            $target_var->set_value(
+                "string",
+                 mb_substr($src1_value, $src2_value, 1)
+            );
         }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {
