@@ -138,6 +138,28 @@ class CallStackEmptyError extends IPPException {
 // }
 
 /******************************************************************************/
+// MARK:RunTime
+class RunTime {
+    public FrameStack $fs;
+    public CallStack $cs;
+    public Interpreter $inter;
+
+    /**
+     * Initializes framestack and callstack, but interpreter needs to be set
+     * via setter
+     */
+    public function __construct() {
+        $this->fs = new FrameStack;
+        $this->cs = new CallStack;
+    }
+
+    public function set_interpreter(Interpreter $inter): void {
+        $this->inter = $inter;
+    }
+}
+
+
+/******************************************************************************/
 // MARK:CallStack
 class CallStack {
     /** @var array<string> */
@@ -591,8 +613,9 @@ class Instruction {
     /**
      * executes instruction and returns a label that should be jumped to,
      * if there is no jump, returns empty string
+     * MARK:execute
      */
-    public function execute(FrameStack $fs, CallStack $cs, Interpreter $inter): string {
+    public function execute(RunTime $rt): string {
         dprintstring("executing", $this->opcode . " order: " .
             (string)$this->order);
 
@@ -620,12 +643,12 @@ class Instruction {
             source variable (and overwrite anythinbg that was set above) */
             if ($src_type === "var") {
                 $src_var = $this->get_nth_arg_value(2);
-                $src_var = $fs->lookup($src_var);
+                $src_var = $rt->fs->lookup($src_var);
                 $src_type = $src_var->get_type();
                 $src_value = $src_var->get_value();
             }
 
-            $target_var = $fs->lookup($target_iden);
+            $target_var = $rt->fs->lookup($target_iden);
             $target_var->set_value($src_type, $src_value);
         }
         // MARK:_defvar
@@ -634,7 +657,7 @@ class Instruction {
             $iden = $this->get_first_arg_value();
 
             try {
-                $fs->lookup($iden);
+                $rt->fs->lookup($iden);
                 $var_already_present = TRUE;
             } catch (FrameAccessError | VariableAccessError) {
                 $var_already_present = FALSE;
@@ -643,33 +666,33 @@ class Instruction {
                 throw new VariableRedefinitionError;
             }
             $var = new Variable($iden);
-            $fs->insert_var($var);
+            $rt->fs->insert_var($var);
         }
         // MARK:_createframe
         else if ($this->get_opcode() === "createframe") {
-            $fs->create_frame();
+            $rt->fs->create_frame();
         } else if ($this->get_opcode() === "pushframe") {
-            $fs->push_frame();
+            $rt->fs->push_frame();
         } else if ($this->get_opcode() === "popframe") {
-            $fs->pop_frame();
+            $rt->fs->pop_frame();
         }
         // MARK:_write
         else if ($this->get_opcode() === "write") {
             $type = $this->get_type_attr(1);
 
             if ($type == "int") {
-                $inter->print($this->get_first_arg_value());
+                $rt->inter->print($this->get_first_arg_value());
             } else if ($type == "string") {
                 $text = $this->get_first_arg_value();
-                $inter->print($this->unescape_string($text));
+                $rt->inter->print($this->unescape_string($text));
             } else if ($type == "var") {
-                $var = $fs->lookup($this->get_first_arg_value());
+                $var = $rt->fs->lookup($this->get_first_arg_value());
                 if ($var->get_type() === "nil") {
                     $text = "";
                 } else {
                     $text = $var->get_value();
                 }
-                $inter->print($text);
+                $rt->inter->print($text);
             } else if ($type === "nil") {
                 /* do nothing */
             } else {
@@ -678,9 +701,9 @@ class Instruction {
         }
         // MARK:add,mul,idiv
         else if ($this->get_opcode() === "add") {
-            $target_var = $fs->lookup($this->get_first_arg_value());
-            $src1_value = $this->get_int_operand(2, $fs);
-            $src2_value = $this->get_int_operand(3, $fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
 
             dlog("adding " . (string)$src1_value . " + " .
                 (string)$src2_value);
@@ -688,9 +711,9 @@ class Instruction {
 
             $target_var->set_value("int", (string)$result);
         } else if ($this->get_opcode() === "mul") {
-            $target_var = $fs->lookup($this->get_first_arg_value());
-            $src1_value = $this->get_int_operand(2, $fs);
-            $src2_value = $this->get_int_operand(3, $fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
 
             dlog("multiplying " . (string)$src1_value . " * " .
                 (string)$src2_value);
@@ -698,9 +721,9 @@ class Instruction {
 
             $target_var->set_value("int", (string)$result);
         } else if ($this->get_opcode() === "idiv") {
-            $target_var = $fs->lookup($this->get_first_arg_value());
-            $src1_value = $this->get_int_operand(2, $fs);
-            $src2_value = $this->get_int_operand(3, $fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
 
             dlog("dividing " . (string)$src1_value . " / " .
                 (string)$src2_value);
@@ -715,10 +738,10 @@ class Instruction {
             $this->get_opcode() === "jumpifeq" ||
             $this->get_opcode() == "jumpifneq"
         ) {
-            $first_type = $this->get_nth_arg_type_resolve(2, $fs);
-            $second_type = $this->get_nth_arg_type_resolve(3, $fs);
-            $first_value = $this->get_nth_arg_value_resolve(2, $fs);
-            $second_value = $this->get_nth_arg_value_resolve(3, $fs);
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
 
             $one_is_nil = $first_type === "nil" || $second_type === "nil";
             $values_are_equal = FALSE;
@@ -745,10 +768,10 @@ class Instruction {
         }
         // MARK:_call, _return
         else if ($this->get_opcode() === "call") {
-            $cs->push(SALT . "_" . (string)$this->get_order());
+            $rt->cs->push(SALT . "_" . (string)$this->get_order());
             $jump_to_label = $this->get_nth_arg_value(1);
         } else if ($this->get_opcode() === "return") {
-            $jump_to_label = $cs->pop();
+            $jump_to_label = $rt->cs->pop();
         }
         // MARK:_dprint, _break
         else if ($this->get_opcode() === "dprint") {
@@ -863,7 +886,7 @@ class InstructionList {
      * `SALT_n` where `n` is the order number of the instruction from which
      * to execute
      */
-    private function execute_from(Interpreter $inter, FrameStack $fs, CallStack $cs, string $label): string {
+    private function execute_from(RunTime $rt, string $label): string {
 
         if (str_contains($label, SALT)) {
             $execute_from = (int)(explode("_", $label)[1]);
@@ -873,7 +896,7 @@ class InstructionList {
                     $reached_ins = $ins->get_order() === $execute_from;
                     continue;
                 }
-                $jumpto = $ins->execute($fs, $cs, $inter);
+                $jumpto = $ins->execute($rt);
                 if ($jumpto !== "") {
                     return $jumpto;
                 }
@@ -886,7 +909,7 @@ class InstructionList {
                     $reached_label = $ins->get_opcode() === "label" && $ins->get_nth_arg_value(1) === $label;
                     continue;
                 }
-                $jumpto = $ins->execute($fs, $cs, $inter);
+                $jumpto = $ins->execute($rt);
                 if ($jumpto !== "") {
                     return $jumpto;
                 }
@@ -897,12 +920,12 @@ class InstructionList {
 
     /** executes all the instructions in the list */
     public function execute(Interpreter $inter): void {
-        $fs = new FrameStack;
-        $cs = new CallStack;
+        $rt = new RunTime;
+        $rt->set_interpreter($inter);
         $jumpto = "";
         $done = FALSE;
         while (!$done) {
-            $jumpto = $this->execute_from($inter, $fs, $cs, $jumpto);
+            $jumpto = $this->execute_from($rt, $jumpto);
             $done = $jumpto === "";
         }
     }
