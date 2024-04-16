@@ -730,6 +730,16 @@ class Instruction {
             $result = intdiv($src1_value, $src2_value);
 
             $target_var->set_value("int", (string)$result);
+        } else if ($this->get_opcode() === "sub") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_value = $this->get_int_operand(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
+
+            dlog("subtracting " . (string)$src1_value . " - " .
+                (string)$src2_value);
+            $result = $src1_value - $src2_value;
+
+            $target_var->set_value("int", (string)$result);
         }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {
