@@ -791,6 +791,7 @@ class Instruction {
             }
 
         }
+        // MARK:_and
         else if ($this->get_opcode() === "and") {
             $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
             $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
@@ -810,6 +811,7 @@ class Instruction {
                 $tvar->set_value("bool", "false");
             }
         }
+        // MARK:_or
         else if ($this->get_opcode() === "or") {
             $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
             $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
@@ -828,6 +830,108 @@ class Instruction {
             } else {
                 $tvar->set_value("bool", "false");
             }
+        }
+        // MARK:_lt
+        else if ($this->get_opcode() === "lt") {
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $one_is_nil = $first_type === "nil" || $second_type === "nil";
+            if ($first_type !== $second_type || $one_is_nil)
+            {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($first_type === "string") {
+                if (strcmp($first_value, $second_value) === -1) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else if ($first_type === "int") {
+                if ((int)$first_value < (int)$second_value) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else if ($first_type === "bool") {
+                if ($first_value === "false" && $second_value === "true") {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else {  // just to be sure
+                $target_var->set_value("bool", "false");
+            }
+
+        }
+        // MARK:_gt
+        else if ($this->get_opcode() === "gt") {
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $one_is_nil = $first_type === "nil" || $second_type === "nil";
+            if ($first_type !== $second_type || $one_is_nil)
+            {
+                throw new IPPTypeError((string)$this);
+            }
+
+            if ($first_type === "string") {
+                if (strcmp($first_value, $second_value) === 1) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else if ($first_type === "int") {
+                if ((int)$first_value > (int)$second_value) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else if ($first_type === "bool") {
+                if ($first_value === "true" && $second_value === "false") {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else {  // just to be sure
+                $target_var->set_value("bool", "false");
+            }
+
+        }
+        // MARK:_eq
+        else if ($this->get_opcode() === "eq") {
+            $first_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $second_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $first_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $second_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $one_is_nil = $first_type === "nil" || $second_type === "nil";
+            if ($first_type !== $second_type && !$one_is_nil)
+            {
+                dlog($first_type . " " . $second_type . " " . $one_is_nil);
+                throw new IPPTypeError((string)$this);
+            }
+
+            if ($first_type === "string" || $first_type === "bool") {
+                if (strcmp($first_value, $second_value) === 0) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else if ($first_type === "int") {
+                if ((int)$first_value === (int)$second_value) {
+                    $target_var->set_value("bool", "true");
+                } else {
+                    $target_var->set_value("bool", "false");
+                }
+            } else {  // just to be sure
+                $target_var->set_value("bool", "false");
+            }
+
         }
 
         // MARK:_add,_mul,_idiv

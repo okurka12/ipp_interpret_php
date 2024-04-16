@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test LT, GT, EQ
+# rc: 0
+.ippcode24
+DEFVAR GF@variable0
+DEFVAR GF@variable1
+DEFVAR GF@variable2
+MOVE GF@variable1 string@a
+MOVE GF@variable2 string@b
+LT GF@variable0 GF@variable1 GF@variable2
+WRITE string@00-tady-by-melo-byt-true:\032
+WRITE GF@variable0
+WRITE string@\010
+
+
+DEFVAR GF@variable3
+DEFVAR GF@variable4
+DEFVAR GF@variable5
+MOVE GF@variable4 int@69
+MOVE GF@variable5 int@420
+LT GF@variable3 GF@variable4 GF@variable5
+WRITE string@03-tady-by-melo-byt-true:\032
+WRITE GF@variable3
+WRITE string@\010
+
+
+DEFVAR GF@variable6
+DEFVAR GF@variable7
+DEFVAR GF@variable8
+MOVE GF@variable7 bool@false
+MOVE GF@variable8 bool@true
+LT GF@variable6 GF@variable7 GF@variable8
+WRITE string@06-tady-by-melo-byt-true:\032
+WRITE GF@variable6
+WRITE string@\010
+
+
+DEFVAR GF@variable9
+DEFVAR GF@variable10
+DEFVAR GF@variable11
+MOVE GF@variable10 string@b
+MOVE GF@variable11 string@a
+GT GF@variable9 GF@variable10 GF@variable11
+WRITE string@09-tady-by-melo-byt-true:\032
+WRITE GF@variable9
+WRITE string@\010
+
+
+DEFVAR GF@variable12
+DEFVAR GF@variable13
+DEFVAR GF@variable14
+MOVE GF@variable13 int@420
+MOVE GF@variable14 int@69
+GT GF@variable12 GF@variable13 GF@variable14
+WRITE string@12-tady-by-melo-byt-true:\032
+WRITE GF@variable12
+WRITE string@\010
+
+
+DEFVAR GF@variable15
+DEFVAR GF@variable16
+DEFVAR GF@variable17
+MOVE GF@variable16 bool@true
+MOVE GF@variable17 bool@false
+GT GF@variable15 GF@variable16 GF@variable17
+WRITE string@15-tady-by-melo-byt-true:\032
+WRITE GF@variable15
+WRITE string@\010
+
+
+DEFVAR GF@variable18
+DEFVAR GF@variable19
+DEFVAR GF@variable20
+MOVE GF@variable19 string@a
+MOVE GF@variable20 string@a
+EQ GF@variable18 GF@variable19 GF@variable20
+WRITE string@18-tady-by-melo-byt-true:\032
+WRITE GF@variable18
+WRITE string@\010
+
+
+DEFVAR GF@variable21
+DEFVAR GF@variable22
+DEFVAR GF@variable23
+MOVE GF@variable22 int@69
+MOVE GF@variable23 int@69
+EQ GF@variable21 GF@variable22 GF@variable23
+WRITE string@21-tady-by-melo-byt-true:\032
+WRITE GF@variable21
+WRITE string@\010
+
+
+DEFVAR GF@variable24
+DEFVAR GF@variable25
+DEFVAR GF@variable26
+MOVE GF@variable25 bool@true
+MOVE GF@variable26 bool@true
+EQ GF@variable24 GF@variable25 GF@variable26
+WRITE string@24-tady-by-melo-byt-true:\032
+WRITE GF@variable24
+WRITE string@\010
+
+
+DEFVAR GF@variable27
+DEFVAR GF@variable28
+DEFVAR GF@variable29
+MOVE GF@variable28 string@b
+MOVE GF@variable29 string@a
+LT GF@variable27 GF@variable28 GF@variable29
+WRITE string@27-tady-by-melo-byt-false:\032
+WRITE GF@variable27
+WRITE string@\010
+
+
+DEFVAR GF@variable30
+DEFVAR GF@variable31
+DEFVAR GF@variable32
+MOVE GF@variable31 int@420
+MOVE GF@variable32 int@69
+LT GF@variable30 GF@variable31 GF@variable32
+WRITE string@30-tady-by-melo-byt-false:\032
+WRITE GF@variable30
+WRITE string@\010
+
+
+DEFVAR GF@variable33
+DEFVAR GF@variable34
+DEFVAR GF@variable35
+MOVE GF@variable34 bool@true
+MOVE GF@variable35 bool@false
+LT GF@variable33 GF@variable34 GF@variable35
+WRITE string@33-tady-by-melo-byt-false:\032
+WRITE GF@variable33
+WRITE string@\010
+
+
+DEFVAR GF@variable36
+DEFVAR GF@variable37
+DEFVAR GF@variable38
+MOVE GF@variable37 string@a
+MOVE GF@variable38 string@b
+GT GF@variable36 GF@variable37 GF@variable38
+WRITE string@36-tady-by-melo-byt-false:\032
+WRITE GF@variable36
+WRITE string@\010
+
+
+DEFVAR GF@variable39
+DEFVAR GF@variable40
+DEFVAR GF@variable41
+MOVE GF@variable40 int@69
+MOVE GF@variable41 int@420
+GT GF@variable39 GF@variable40 GF@variable41
+WRITE string@39-tady-by-melo-byt-false:\032
+WRITE GF@variable39
+WRITE string@\010
+
+
+DEFVAR GF@variable42
+DEFVAR GF@variable43
+DEFVAR GF@variable44
+MOVE GF@variable43 bool@false
+MOVE GF@variable44 bool@true
+GT GF@variable42 GF@variable43 GF@variable44
+WRITE string@42-tady-by-melo-byt-false:\032
+WRITE GF@variable42
+WRITE string@\010
+
+
+DEFVAR GF@variable45
+DEFVAR GF@variable46
+DEFVAR GF@variable47
+MOVE GF@variable46 string@a
+MOVE GF@variable47 string@b
+EQ GF@variable45 GF@variable46 GF@variable47
+WRITE string@45-tady-by-melo-byt-false:\032
+WRITE GF@variable45
+WRITE string@\010
+
+
+DEFVAR GF@variable48
+DEFVAR GF@variable49
+DEFVAR GF@variable50
+MOVE GF@variable49 int@69
+MOVE GF@variable50 int@420
+EQ GF@variable48 GF@variable49 GF@variable50
+WRITE string@48-tady-by-melo-byt-false:\032
+WRITE GF@variable48
+WRITE string@\010
+
+
+DEFVAR GF@variable51
+DEFVAR GF@variable52
+DEFVAR GF@variable53
+MOVE GF@variable52 bool@true
+MOVE GF@variable53 bool@false
+EQ GF@variable51 GF@variable52 GF@variable53
+WRITE string@51-tady-by-melo-byt-false:\032
+WRITE GF@variable51
+WRITE string@\010
+
+
+DEFVAR GF@variable54
+DEFVAR GF@variable55
+DEFVAR GF@variable56
+MOVE GF@variable55 bool@true
+MOVE GF@variable56 nil@nil
+EQ GF@variable54 GF@variable55 GF@variable56
+WRITE string@54-tady-by-melo-byt-false:\032
+WRITE GF@variable54
+WRITE string@\010
+
+
+DEFVAR GF@variable57
+DEFVAR GF@variable58
+DEFVAR GF@variable59
+MOVE GF@variable58 string@a
+MOVE GF@variable59 nil@nil
+EQ GF@variable57 GF@variable58 GF@variable59
+WRITE string@57-tady-by-melo-byt-false:\032
+WRITE GF@variable57
+WRITE string@\010
+
+
+DEFVAR GF@variable60
+DEFVAR GF@variable61
+DEFVAR GF@variable62
+MOVE GF@variable61 int@69
+MOVE GF@variable62 nil@nil
+EQ GF@variable60 GF@variable61 GF@variable62
+WRITE string@60-tady-by-melo-byt-false:\032
+WRITE GF@variable60
+WRITE string@\010
+
+
+DEFVAR GF@variable63
+DEFVAR GF@variable64
+DEFVAR GF@variable65
+MOVE GF@variable64 nil@nil
+MOVE GF@variable65 bool@true
+EQ GF@variable63 GF@variable64 GF@variable65
+WRITE string@63-tady-by-melo-byt-false:\032
+WRITE GF@variable63
+WRITE string@\010
+
+
+DEFVAR GF@variable66
+DEFVAR GF@variable67
+DEFVAR GF@variable68
+MOVE GF@variable67 nil@nil
+MOVE GF@variable68 string@a
+EQ GF@variable66 GF@variable67 GF@variable68
+WRITE string@66-tady-by-melo-byt-false:\032
+WRITE GF@variable66
+WRITE string@\010
+
+
+DEFVAR GF@variable69
+DEFVAR GF@variable70
+DEFVAR GF@variable71
+MOVE GF@variable70 nil@nil
+MOVE GF@variable71 int@69
+EQ GF@variable69 GF@variable70 GF@variable71
+WRITE string@69-tady-by-melo-byt-false:\032
+WRITE GF@variable69
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@variable0</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@variable1</arg1>
+</instruction>
+<instruction order="3" opcode="DEFVAR">
+<arg1 type="var">GF@variable2</arg1>
+</instruction>
+<instruction order="4" opcode="MOVE">
+<arg1 type="var">GF@variable1</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="5" opcode="MOVE">
+<arg1 type="var">GF@variable2</arg1>
+<arg2 type="string">b</arg2>
+</instruction>
+<instruction order="6" opcode="LT">
+<arg1 type="var">GF@variable0</arg1>
+<arg2 type="var">GF@variable1</arg2>
+<arg3 type="var">GF@variable2</arg3>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">00-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="8" opcode="WRITE">
+<arg1 type="var">GF@variable0</arg1>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="10" opcode="DEFVAR">
+<arg1 type="var">GF@variable3</arg1>
+</instruction>
+<instruction order="11" opcode="DEFVAR">
+<arg1 type="var">GF@variable4</arg1>
+</instruction>
+<instruction order="12" opcode="DEFVAR">
+<arg1 type="var">GF@variable5</arg1>
+</instruction>
+<instruction order="13" opcode="MOVE">
+<arg1 type="var">GF@variable4</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="14" opcode="MOVE">
+<arg1 type="var">GF@variable5</arg1>
+<arg2 type="int">420</arg2>
+</instruction>
+<instruction order="15" opcode="LT">
+<arg1 type="var">GF@variable3</arg1>
+<arg2 type="var">GF@variable4</arg2>
+<arg3 type="var">GF@variable5</arg3>
+</instruction>
+<instruction order="16" opcode="WRITE">
+<arg1 type="string">03-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="17" opcode="WRITE">
+<arg1 type="var">GF@variable3</arg1>
+</instruction>
+<instruction order="18" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="19" opcode="DEFVAR">
+<arg1 type="var">GF@variable6</arg1>
+</instruction>
+<instruction order="20" opcode="DEFVAR">
+<arg1 type="var">GF@variable7</arg1>
+</instruction>
+<instruction order="21" opcode="DEFVAR">
+<arg1 type="var">GF@variable8</arg1>
+</instruction>
+<instruction order="22" opcode="MOVE">
+<arg1 type="var">GF@variable7</arg1>
+<arg2 type="bool">false</arg2>
+</instruction>
+<instruction order="23" opcode="MOVE">
+<arg1 type="var">GF@variable8</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="24" opcode="LT">
+<arg1 type="var">GF@variable6</arg1>
+<arg2 type="var">GF@variable7</arg2>
+<arg3 type="var">GF@variable8</arg3>
+</instruction>
+<instruction order="25" opcode="WRITE">
+<arg1 type="string">06-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="26" opcode="WRITE">
+<arg1 type="var">GF@variable6</arg1>
+</instruction>
+<instruction order="27" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="28" opcode="DEFVAR">
+<arg1 type="var">GF@variable9</arg1>
+</instruction>
+<instruction order="29" opcode="DEFVAR">
+<arg1 type="var">GF@variable10</arg1>
+</instruction>
+<instruction order="30" opcode="DEFVAR">
+<arg1 type="var">GF@variable11</arg1>
+</instruction>
+<instruction order="31" opcode="MOVE">
+<arg1 type="var">GF@variable10</arg1>
+<arg2 type="string">b</arg2>
+</instruction>
+<instruction order="32" opcode="MOVE">
+<arg1 type="var">GF@variable11</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="33" opcode="GT">
+<arg1 type="var">GF@variable9</arg1>
+<arg2 type="var">GF@variable10</arg2>
+<arg3 type="var">GF@variable11</arg3>
+</instruction>
+<instruction order="34" opcode="WRITE">
+<arg1 type="string">09-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="35" opcode="WRITE">
+<arg1 type="var">GF@variable9</arg1>
+</instruction>
+<instruction order="36" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="37" opcode="DEFVAR">
+<arg1 type="var">GF@variable12</arg1>
+</instruction>
+<instruction order="38" opcode="DEFVAR">
+<arg1 type="var">GF@variable13</arg1>
+</instruction>
+<instruction order="39" opcode="DEFVAR">
+<arg1 type="var">GF@variable14</arg1>
+</instruction>
+<instruction order="40" opcode="MOVE">
+<arg1 type="var">GF@variable13</arg1>
+<arg2 type="int">420</arg2>
+</instruction>
+<instruction order="41" opcode="MOVE">
+<arg1 type="var">GF@variable14</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="42" opcode="GT">
+<arg1 type="var">GF@variable12</arg1>
+<arg2 type="var">GF@variable13</arg2>
+<arg3 type="var">GF@variable14</arg3>
+</instruction>
+<instruction order="43" opcode="WRITE">
+<arg1 type="string">12-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="44" opcode="WRITE">
+<arg1 type="var">GF@variable12</arg1>
+</instruction>
+<instruction order="45" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="46" opcode="DEFVAR">
+<arg1 type="var">GF@variable15</arg1>
+</instruction>
+<instruction order="47" opcode="DEFVAR">
+<arg1 type="var">GF@variable16</arg1>
+</instruction>
+<instruction order="48" opcode="DEFVAR">
+<arg1 type="var">GF@variable17</arg1>
+</instruction>
+<instruction order="49" opcode="MOVE">
+<arg1 type="var">GF@variable16</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="50" opcode="MOVE">
+<arg1 type="var">GF@variable17</arg1>
+<arg2 type="bool">false</arg2>
+</instruction>
+<instruction order="51" opcode="GT">
+<arg1 type="var">GF@variable15</arg1>
+<arg2 type="var">GF@variable16</arg2>
+<arg3 type="var">GF@variable17</arg3>
+</instruction>
+<instruction order="52" opcode="WRITE">
+<arg1 type="string">15-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="53" opcode="WRITE">
+<arg1 type="var">GF@variable15</arg1>
+</instruction>
+<instruction order="54" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="55" opcode="DEFVAR">
+<arg1 type="var">GF@variable18</arg1>
+</instruction>
+<instruction order="56" opcode="DEFVAR">
+<arg1 type="var">GF@variable19</arg1>
+</instruction>
+<instruction order="57" opcode="DEFVAR">
+<arg1 type="var">GF@variable20</arg1>
+</instruction>
+<instruction order="58" opcode="MOVE">
+<arg1 type="var">GF@variable19</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="59" opcode="MOVE">
+<arg1 type="var">GF@variable20</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="60" opcode="EQ">
+<arg1 type="var">GF@variable18</arg1>
+<arg2 type="var">GF@variable19</arg2>
+<arg3 type="var">GF@variable20</arg3>
+</instruction>
+<instruction order="61" opcode="WRITE">
+<arg1 type="string">18-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="62" opcode="WRITE">
+<arg1 type="var">GF@variable18</arg1>
+</instruction>
+<instruction order="63" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="64" opcode="DEFVAR">
+<arg1 type="var">GF@variable21</arg1>
+</instruction>
+<instruction order="65" opcode="DEFVAR">
+<arg1 type="var">GF@variable22</arg1>
+</instruction>
+<instruction order="66" opcode="DEFVAR">
+<arg1 type="var">GF@variable23</arg1>
+</instruction>
+<instruction order="67" opcode="MOVE">
+<arg1 type="var">GF@variable22</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="68" opcode="MOVE">
+<arg1 type="var">GF@variable23</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="69" opcode="EQ">
+<arg1 type="var">GF@variable21</arg1>
+<arg2 type="var">GF@variable22</arg2>
+<arg3 type="var">GF@variable23</arg3>
+</instruction>
+<instruction order="70" opcode="WRITE">
+<arg1 type="string">21-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="71" opcode="WRITE">
+<arg1 type="var">GF@variable21</arg1>
+</instruction>
+<instruction order="72" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="73" opcode="DEFVAR">
+<arg1 type="var">GF@variable24</arg1>
+</instruction>
+<instruction order="74" opcode="DEFVAR">
+<arg1 type="var">GF@variable25</arg1>
+</instruction>
+<instruction order="75" opcode="DEFVAR">
+<arg1 type="var">GF@variable26</arg1>
+</instruction>
+<instruction order="76" opcode="MOVE">
+<arg1 type="var">GF@variable25</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="77" opcode="MOVE">
+<arg1 type="var">GF@variable26</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="78" opcode="EQ">
+<arg1 type="var">GF@variable24</arg1>
+<arg2 type="var">GF@variable25</arg2>
+<arg3 type="var">GF@variable26</arg3>
+</instruction>
+<instruction order="79" opcode="WRITE">
+<arg1 type="string">24-tady-by-melo-byt-true:\032</arg1>
+</instruction>
+<instruction order="80" opcode="WRITE">
+<arg1 type="var">GF@variable24</arg1>
+</instruction>
+<instruction order="81" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="82" opcode="DEFVAR">
+<arg1 type="var">GF@variable27</arg1>
+</instruction>
+<instruction order="83" opcode="DEFVAR">
+<arg1 type="var">GF@variable28</arg1>
+</instruction>
+<instruction order="84" opcode="DEFVAR">
+<arg1 type="var">GF@variable29</arg1>
+</instruction>
+<instruction order="85" opcode="MOVE">
+<arg1 type="var">GF@variable28</arg1>
+<arg2 type="string">b</arg2>
+</instruction>
+<instruction order="86" opcode="MOVE">
+<arg1 type="var">GF@variable29</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="87" opcode="LT">
+<arg1 type="var">GF@variable27</arg1>
+<arg2 type="var">GF@variable28</arg2>
+<arg3 type="var">GF@variable29</arg3>
+</instruction>
+<instruction order="88" opcode="WRITE">
+<arg1 type="string">27-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="89" opcode="WRITE">
+<arg1 type="var">GF@variable27</arg1>
+</instruction>
+<instruction order="90" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="91" opcode="DEFVAR">
+<arg1 type="var">GF@variable30</arg1>
+</instruction>
+<instruction order="92" opcode="DEFVAR">
+<arg1 type="var">GF@variable31</arg1>
+</instruction>
+<instruction order="93" opcode="DEFVAR">
+<arg1 type="var">GF@variable32</arg1>
+</instruction>
+<instruction order="94" opcode="MOVE">
+<arg1 type="var">GF@variable31</arg1>
+<arg2 type="int">420</arg2>
+</instruction>
+<instruction order="95" opcode="MOVE">
+<arg1 type="var">GF@variable32</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="96" opcode="LT">
+<arg1 type="var">GF@variable30</arg1>
+<arg2 type="var">GF@variable31</arg2>
+<arg3 type="var">GF@variable32</arg3>
+</instruction>
+<instruction order="97" opcode="WRITE">
+<arg1 type="string">30-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="98" opcode="WRITE">
+<arg1 type="var">GF@variable30</arg1>
+</instruction>
+<instruction order="99" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="100" opcode="DEFVAR">
+<arg1 type="var">GF@variable33</arg1>
+</instruction>
+<instruction order="101" opcode="DEFVAR">
+<arg1 type="var">GF@variable34</arg1>
+</instruction>
+<instruction order="102" opcode="DEFVAR">
+<arg1 type="var">GF@variable35</arg1>
+</instruction>
+<instruction order="103" opcode="MOVE">
+<arg1 type="var">GF@variable34</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="104" opcode="MOVE">
+<arg1 type="var">GF@variable35</arg1>
+<arg2 type="bool">false</arg2>
+</instruction>
+<instruction order="105" opcode="LT">
+<arg1 type="var">GF@variable33</arg1>
+<arg2 type="var">GF@variable34</arg2>
+<arg3 type="var">GF@variable35</arg3>
+</instruction>
+<instruction order="106" opcode="WRITE">
+<arg1 type="string">33-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="107" opcode="WRITE">
+<arg1 type="var">GF@variable33</arg1>
+</instruction>
+<instruction order="108" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="109" opcode="DEFVAR">
+<arg1 type="var">GF@variable36</arg1>
+</instruction>
+<instruction order="110" opcode="DEFVAR">
+<arg1 type="var">GF@variable37</arg1>
+</instruction>
+<instruction order="111" opcode="DEFVAR">
+<arg1 type="var">GF@variable38</arg1>
+</instruction>
+<instruction order="112" opcode="MOVE">
+<arg1 type="var">GF@variable37</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="113" opcode="MOVE">
+<arg1 type="var">GF@variable38</arg1>
+<arg2 type="string">b</arg2>
+</instruction>
+<instruction order="114" opcode="GT">
+<arg1 type="var">GF@variable36</arg1>
+<arg2 type="var">GF@variable37</arg2>
+<arg3 type="var">GF@variable38</arg3>
+</instruction>
+<instruction order="115" opcode="WRITE">
+<arg1 type="string">36-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="116" opcode="WRITE">
+<arg1 type="var">GF@variable36</arg1>
+</instruction>
+<instruction order="117" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="118" opcode="DEFVAR">
+<arg1 type="var">GF@variable39</arg1>
+</instruction>
+<instruction order="119" opcode="DEFVAR">
+<arg1 type="var">GF@variable40</arg1>
+</instruction>
+<instruction order="120" opcode="DEFVAR">
+<arg1 type="var">GF@variable41</arg1>
+</instruction>
+<instruction order="121" opcode="MOVE">
+<arg1 type="var">GF@variable40</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="122" opcode="MOVE">
+<arg1 type="var">GF@variable41</arg1>
+<arg2 type="int">420</arg2>
+</instruction>
+<instruction order="123" opcode="GT">
+<arg1 type="var">GF@variable39</arg1>
+<arg2 type="var">GF@variable40</arg2>
+<arg3 type="var">GF@variable41</arg3>
+</instruction>
+<instruction order="124" opcode="WRITE">
+<arg1 type="string">39-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="125" opcode="WRITE">
+<arg1 type="var">GF@variable39</arg1>
+</instruction>
+<instruction order="126" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="127" opcode="DEFVAR">
+<arg1 type="var">GF@variable42</arg1>
+</instruction>
+<instruction order="128" opcode="DEFVAR">
+<arg1 type="var">GF@variable43</arg1>
+</instruction>
+<instruction order="129" opcode="DEFVAR">
+<arg1 type="var">GF@variable44</arg1>
+</instruction>
+<instruction order="130" opcode="MOVE">
+<arg1 type="var">GF@variable43</arg1>
+<arg2 type="bool">false</arg2>
+</instruction>
+<instruction order="131" opcode="MOVE">
+<arg1 type="var">GF@variable44</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="132" opcode="GT">
+<arg1 type="var">GF@variable42</arg1>
+<arg2 type="var">GF@variable43</arg2>
+<arg3 type="var">GF@variable44</arg3>
+</instruction>
+<instruction order="133" opcode="WRITE">
+<arg1 type="string">42-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="134" opcode="WRITE">
+<arg1 type="var">GF@variable42</arg1>
+</instruction>
+<instruction order="135" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="136" opcode="DEFVAR">
+<arg1 type="var">GF@variable45</arg1>
+</instruction>
+<instruction order="137" opcode="DEFVAR">
+<arg1 type="var">GF@variable46</arg1>
+</instruction>
+<instruction order="138" opcode="DEFVAR">
+<arg1 type="var">GF@variable47</arg1>
+</instruction>
+<instruction order="139" opcode="MOVE">
+<arg1 type="var">GF@variable46</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="140" opcode="MOVE">
+<arg1 type="var">GF@variable47</arg1>
+<arg2 type="string">b</arg2>
+</instruction>
+<instruction order="141" opcode="EQ">
+<arg1 type="var">GF@variable45</arg1>
+<arg2 type="var">GF@variable46</arg2>
+<arg3 type="var">GF@variable47</arg3>
+</instruction>
+<instruction order="142" opcode="WRITE">
+<arg1 type="string">45-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="143" opcode="WRITE">
+<arg1 type="var">GF@variable45</arg1>
+</instruction>
+<instruction order="144" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="145" opcode="DEFVAR">
+<arg1 type="var">GF@variable48</arg1>
+</instruction>
+<instruction order="146" opcode="DEFVAR">
+<arg1 type="var">GF@variable49</arg1>
+</instruction>
+<instruction order="147" opcode="DEFVAR">
+<arg1 type="var">GF@variable50</arg1>
+</instruction>
+<instruction order="148" opcode="MOVE">
+<arg1 type="var">GF@variable49</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="149" opcode="MOVE">
+<arg1 type="var">GF@variable50</arg1>
+<arg2 type="int">420</arg2>
+</instruction>
+<instruction order="150" opcode="EQ">
+<arg1 type="var">GF@variable48</arg1>
+<arg2 type="var">GF@variable49</arg2>
+<arg3 type="var">GF@variable50</arg3>
+</instruction>
+<instruction order="151" opcode="WRITE">
+<arg1 type="string">48-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="152" opcode="WRITE">
+<arg1 type="var">GF@variable48</arg1>
+</instruction>
+<instruction order="153" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="154" opcode="DEFVAR">
+<arg1 type="var">GF@variable51</arg1>
+</instruction>
+<instruction order="155" opcode="DEFVAR">
+<arg1 type="var">GF@variable52</arg1>
+</instruction>
+<instruction order="156" opcode="DEFVAR">
+<arg1 type="var">GF@variable53</arg1>
+</instruction>
+<instruction order="157" opcode="MOVE">
+<arg1 type="var">GF@variable52</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="158" opcode="MOVE">
+<arg1 type="var">GF@variable53</arg1>
+<arg2 type="bool">false</arg2>
+</instruction>
+<instruction order="159" opcode="EQ">
+<arg1 type="var">GF@variable51</arg1>
+<arg2 type="var">GF@variable52</arg2>
+<arg3 type="var">GF@variable53</arg3>
+</instruction>
+<instruction order="160" opcode="WRITE">
+<arg1 type="string">51-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="161" opcode="WRITE">
+<arg1 type="var">GF@variable51</arg1>
+</instruction>
+<instruction order="162" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="163" opcode="DEFVAR">
+<arg1 type="var">GF@variable54</arg1>
+</instruction>
+<instruction order="164" opcode="DEFVAR">
+<arg1 type="var">GF@variable55</arg1>
+</instruction>
+<instruction order="165" opcode="DEFVAR">
+<arg1 type="var">GF@variable56</arg1>
+</instruction>
+<instruction order="166" opcode="MOVE">
+<arg1 type="var">GF@variable55</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="167" opcode="MOVE">
+<arg1 type="var">GF@variable56</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="168" opcode="EQ">
+<arg1 type="var">GF@variable54</arg1>
+<arg2 type="var">GF@variable55</arg2>
+<arg3 type="var">GF@variable56</arg3>
+</instruction>
+<instruction order="169" opcode="WRITE">
+<arg1 type="string">54-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="170" opcode="WRITE">
+<arg1 type="var">GF@variable54</arg1>
+</instruction>
+<instruction order="171" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="172" opcode="DEFVAR">
+<arg1 type="var">GF@variable57</arg1>
+</instruction>
+<instruction order="173" opcode="DEFVAR">
+<arg1 type="var">GF@variable58</arg1>
+</instruction>
+<instruction order="174" opcode="DEFVAR">
+<arg1 type="var">GF@variable59</arg1>
+</instruction>
+<instruction order="175" opcode="MOVE">
+<arg1 type="var">GF@variable58</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="176" opcode="MOVE">
+<arg1 type="var">GF@variable59</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="177" opcode="EQ">
+<arg1 type="var">GF@variable57</arg1>
+<arg2 type="var">GF@variable58</arg2>
+<arg3 type="var">GF@variable59</arg3>
+</instruction>
+<instruction order="178" opcode="WRITE">
+<arg1 type="string">57-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="179" opcode="WRITE">
+<arg1 type="var">GF@variable57</arg1>
+</instruction>
+<instruction order="180" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="181" opcode="DEFVAR">
+<arg1 type="var">GF@variable60</arg1>
+</instruction>
+<instruction order="182" opcode="DEFVAR">
+<arg1 type="var">GF@variable61</arg1>
+</instruction>
+<instruction order="183" opcode="DEFVAR">
+<arg1 type="var">GF@variable62</arg1>
+</instruction>
+<instruction order="184" opcode="MOVE">
+<arg1 type="var">GF@variable61</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="185" opcode="MOVE">
+<arg1 type="var">GF@variable62</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="186" opcode="EQ">
+<arg1 type="var">GF@variable60</arg1>
+<arg2 type="var">GF@variable61</arg2>
+<arg3 type="var">GF@variable62</arg3>
+</instruction>
+<instruction order="187" opcode="WRITE">
+<arg1 type="string">60-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="188" opcode="WRITE">
+<arg1 type="var">GF@variable60</arg1>
+</instruction>
+<instruction order="189" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="190" opcode="DEFVAR">
+<arg1 type="var">GF@variable63</arg1>
+</instruction>
+<instruction order="191" opcode="DEFVAR">
+<arg1 type="var">GF@variable64</arg1>
+</instruction>
+<instruction order="192" opcode="DEFVAR">
+<arg1 type="var">GF@variable65</arg1>
+</instruction>
+<instruction order="193" opcode="MOVE">
+<arg1 type="var">GF@variable64</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="194" opcode="MOVE">
+<arg1 type="var">GF@variable65</arg1>
+<arg2 type="bool">true</arg2>
+</instruction>
+<instruction order="195" opcode="EQ">
+<arg1 type="var">GF@variable63</arg1>
+<arg2 type="var">GF@variable64</arg2>
+<arg3 type="var">GF@variable65</arg3>
+</instruction>
+<instruction order="196" opcode="WRITE">
+<arg1 type="string">63-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="197" opcode="WRITE">
+<arg1 type="var">GF@variable63</arg1>
+</instruction>
+<instruction order="198" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="199" opcode="DEFVAR">
+<arg1 type="var">GF@variable66</arg1>
+</instruction>
+<instruction order="200" opcode="DEFVAR">
+<arg1 type="var">GF@variable67</arg1>
+</instruction>
+<instruction order="201" opcode="DEFVAR">
+<arg1 type="var">GF@variable68</arg1>
+</instruction>
+<instruction order="202" opcode="MOVE">
+<arg1 type="var">GF@variable67</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="203" opcode="MOVE">
+<arg1 type="var">GF@variable68</arg1>
+<arg2 type="string">a</arg2>
+</instruction>
+<instruction order="204" opcode="EQ">
+<arg1 type="var">GF@variable66</arg1>
+<arg2 type="var">GF@variable67</arg2>
+<arg3 type="var">GF@variable68</arg3>
+</instruction>
+<instruction order="205" opcode="WRITE">
+<arg1 type="string">66-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="206" opcode="WRITE">
+<arg1 type="var">GF@variable66</arg1>
+</instruction>
+<instruction order="207" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="208" opcode="DEFVAR">
+<arg1 type="var">GF@variable69</arg1>
+</instruction>
+<instruction order="209" opcode="DEFVAR">
+<arg1 type="var">GF@variable70</arg1>
+</instruction>
+<instruction order="210" opcode="DEFVAR">
+<arg1 type="var">GF@variable71</arg1>
+</instruction>
+<instruction order="211" opcode="MOVE">
+<arg1 type="var">GF@variable70</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="212" opcode="MOVE">
+<arg1 type="var">GF@variable71</arg1>
+<arg2 type="int">69</arg2>
+</instruction>
+<instruction order="213" opcode="EQ">
+<arg1 type="var">GF@variable69</arg1>
+<arg2 type="var">GF@variable70</arg2>
+<arg3 type="var">GF@variable71</arg3>
+</instruction>
+<instruction order="214" opcode="WRITE">
+<arg1 type="string">69-tady-by-melo-byt-false:\032</arg1>
+</instruction>
+<instruction order="215" opcode="WRITE">
+<arg1 type="var">GF@variable69</arg1>
+</instruction>
+<instruction order="216" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

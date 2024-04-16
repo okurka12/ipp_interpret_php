@@ -103,6 +103,7 @@ test_file test_source55.xml 0
 test_file test_source56.xml 56
 test_file test_source57.xml 0
 test_file test_source58.xml 0
+test_file test_source59.xml 0
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"
