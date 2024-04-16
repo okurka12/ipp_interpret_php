@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test CONCAT
+# rc: 0
+.IPPcode24
+
+DEFVAR GF@a
+MOVE GF@a string@ah
+
+DEFVAR GF@b
+CONCAT GF@b GF@a string@oj
+
+WRITE string@tady-by-melo-byt-ahoj:\032
+WRITE GF@b
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">ah</arg2>
+</instruction>
+<instruction order="3" opcode="DEFVAR">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="4" opcode="CONCAT">
+<arg1 type="var">GF@b</arg1>
+<arg2 type="var">GF@a</arg2>
+<arg3 type="string">oj</arg3>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-ahoj:\032</arg1>
+</instruction>
+<instruction order="6" opcode="WRITE">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

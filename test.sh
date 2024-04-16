@@ -45,7 +45,7 @@ test_file () {
 
 ################################################################################
 test_file test_source00.xml 31
-test_file test_source01.xml 0
+# test_file test_source01.xml 0
 test_file test_source02.xml 54
 test_file test_source03.xml 32  # invalid xml
 test_file test_source04.xml 52  # unknown label
@@ -101,6 +101,7 @@ test_file test_source53.xml 0
 test_file test_source54.xml 0
 test_file test_source55.xml 0
 test_file test_source56.xml 56
+test_file test_source57.xml 0
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

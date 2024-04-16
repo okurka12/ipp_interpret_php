@@ -110,6 +110,10 @@ class XMLStructureError extends IPPException {
         );
     }
 }
+
+/**
+ * return code: 53
+ */
 class IPPTypeError extends IPPException {
     public function __construct(string $when) {
         parent::__construct(
@@ -742,6 +746,18 @@ class Instruction {
             } else {
                 throw new NotImplementedException;
             }
+        }
+        else if ($this->get_opcode() === "concat") {
+            $s1type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $s2type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            if ($s1type !== "string" || $s2type !== "string") {
+                throw new IPPTypeError((string)$this);
+            }
+            $s1value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $s2value = $this->get_nth_arg_value_resolve(3, $rt->fs);
+            $tvalue = $s1value . $s2value;
+            $tvar = $rt->fs->lookup($this->get_first_arg_value());
+            $tvar->set_value("string", $tvalue);
         }
         // MARK:_type
         else if ($this->get_opcode() === "type") {
