@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# WRITE nil@nil
+# rc: 0
+.IPPcode24
+
+DEFVAR GF@a
+
+MOVE GF@a nil@nil
+
+WRITE string@zde-by-nemelo-byt-nic:\032
+WRITE GF@a
+
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="MOVE">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="nil">nil</arg2>
+</instruction>
+<instruction order="3" opcode="WRITE">
+<arg1 type="string">zde-by-nemelo-byt-nic:\032</arg1>
+</instruction>
+<instruction order="4" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

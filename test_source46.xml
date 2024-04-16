@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# WRITE nil@nil
+# rc: 0
+.IPPcode24
+
+WRITE string@zde-by-nemelo-byt-nic:\032
+WRITE nil@nil
+
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="WRITE">
+<arg1 type="string">zde-by-nemelo-byt-nic:\032</arg1>
+</instruction>
+<instruction order="2" opcode="WRITE">
+<arg1 type="nil">nil</arg1>
+</instruction>
+<instruction order="3" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

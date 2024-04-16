@@ -745,8 +745,19 @@ class Instruction
             else if ($type == "var")
             {
                 $var = $fs->lookup($this->get_first_arg_value());
-                $text = $var->get_value();
+                if ($var->get_type() === "nil")
+                {
+                    $text = "";
+                }
+                else
+                {
+                    $text = $var->get_value();
+                }
                 $inter->print($text);
+            }
+            else if ($type === "nil")
+            {
+                /* do nothing */
             }
             else
             {
