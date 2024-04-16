@@ -30,9 +30,9 @@ test_val () {
 # $1 - file to test, $2 - expected return code
 test_file () {
     if $SHOW_STDOUT; then
-        STDOUT=$(cat "$1" | php interpret.php --source=$1 2> /dev/null)
+        STDOUT=$(echo "" | php interpret.php --source=$1 2> /dev/null)
     else
-        STDOUT=$(cat "$1" | php interpret.php --source=$1 > /dev/null 2> /dev/null)
+        STDOUT=$(echo "" | php interpret.php --source=$1 > /dev/null 2> /dev/null)
     fi
     test_val $? $2 "$1"
     if $SHOW_STDOUT; then
