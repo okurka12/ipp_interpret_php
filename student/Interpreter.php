@@ -1026,6 +1026,7 @@ class Instruction {
             }
             $target_var->set_value("int", (string)mb_strlen($src_value));
         }
+        // MARK:_getchar
         else if ($this->get_opcode() === "getchar") {
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $src1_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
@@ -1040,6 +1041,26 @@ class Instruction {
             $target_var->set_value(
                 "string",
                  mb_substr($src1_value, $src2_value, 1)
+            );
+        }
+        // MARK:_setchar
+        else if ($this->get_opcode() === "setchar") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_type = $this->get_nth_arg_type_resolve(1, $rt->fs);
+            $src1_value = $this->get_nth_arg_value_resolve(1, $rt->fs);
+            $src2_value = $this->get_int_operand(2, $rt->fs);
+            $src3_type = $this->get_nth_arg_type_resolve(3, $rt->fs);
+            $src3_value = $this->get_nth_arg_value_resolve(3, $rt->fs);
+
+            if ($src1_type !== "string" || $src3_type !== "string") {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($src2_value > mb_strlen($src1_value) - 1) {
+                throw new IPPStringError;
+            }
+            $target_var->set_value(
+                "string",
+                 substr_replace($src1_value, $src3_value, $src2_value, 1)
             );
         }
         // MARK:_jump
