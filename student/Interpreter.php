@@ -830,9 +830,10 @@ class Instruction {
                 throw new IPPTypeError((string)$this);
             }
             if (!$one_is_nil) {
-                if ($first_type === "int") {
-                    $values_are_equal = $first_value === $second_value;
-                }
+                // if ($first_type === "int") {
+                //     $values_are_equal = $first_value === $second_value;
+                // }
+                $values_are_equal = $first_value === $second_value;
             }
 
             $should_jump = $values_are_equal;
