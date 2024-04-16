@@ -1063,6 +1063,31 @@ class Instruction {
                  substr_replace($src1_value, $src3_value, $src2_value, 1)
             );
         }
+        else if ($this->get_opcode() === "read") {
+            $tvar = $rt->fs->lookup($this->get_first_arg_value());
+            $type = $this->get_second_arg_value();
+
+            $target_type = "";
+            $target_value = "";
+
+            if ($type === "int") {
+                $target_type = "int";
+                $target_value = (string)$rt->inter->read_int();
+            } else if ($type === "string") {
+                $target_type = "string";
+                $target_value = $rt->inter->read_string();
+            } else if ($type === "bool") {
+                $target_type = "bool";
+                $target_value = $rt->inter->read_bool();
+            } else {
+                throw new IPPTypeError((string)$this);
+            }
+            if (is_null($target_value)) {
+                $tvar->set_value("nil", "nil");
+            } else {
+                $tvar->set_value($target_type, $target_value);
+            }
+        }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {
             $jump_to_label = $this->get_nth_arg_value(1);
@@ -1327,5 +1352,18 @@ class Interpreter extends AbstractInterpreter {
 
     public function print(string $s): void {
         $this->stdout->writeString($s);
+    }
+    public function read_int(): int|null {
+        return $this->input->readInt();
+    }
+    public function read_string(): string|null {
+        return $this->input->readString();
+    }
+    public function read_bool(): string|null {
+        if ($this->input->readBool()) {
+            return "true";
+        } else {
+            return "false";
+        }
     }
 }
