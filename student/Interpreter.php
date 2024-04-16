@@ -1004,6 +1004,27 @@ class Instruction {
             $target_var->set_value("string", $result);
 
         }
+        // MARK:_stri2int
+        else if ($this->get_opcode() === "stri2int") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src1_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $src1_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            $src2_value = $this->get_int_operand(3, $rt->fs);
+
+            if ($src1_type !== "string") {
+                throw new IPPTypeError((string)$this);
+            }
+            if ($src2_value > mb_strlen($src1_value) - 1) {
+                throw new IPPStringError;
+            }
+
+
+            dlog("stri2int investigating " .
+                mb_substr($src1_value, $src2_value, 1));
+            $result = mb_ord(mb_substr($src1_value, $src2_value, 1));
+            $target_var->set_value("int", (string)$result);
+
+        }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {
             $jump_to_label = $this->get_nth_arg_value(1);
