@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test STRLEN
+# rc: 0
+.ippcode24
+
+DEFVAR GF@a
+DEFVAR GF@ahoj
+
+MOVE GF@ahoj string@ahoj
+STRLEN GF@a GF@ahoj
+
+WRITE string@tady-by-melo-byt-4:\032
+WRITE GF@a
+WRITE string@\010
+
+STRLEN GF@a string@+ěščřžýáíé
+
+WRITE string@tady-by-melo-byt-10:\032
+WRITE GF@a
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@ahoj</arg1>
+</instruction>
+<instruction order="3" opcode="MOVE">
+<arg1 type="var">GF@ahoj</arg1>
+<arg2 type="string">ahoj</arg2>
+</instruction>
+<instruction order="4" opcode="STRLEN">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="var">GF@ahoj</arg2>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-4:\032</arg1>
+</instruction>
+<instruction order="6" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="7" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+<instruction order="8" opcode="STRLEN">
+<arg1 type="var">GF@a</arg1>
+<arg2 type="string">+ěščřžýáíé</arg2>
+</instruction>
+<instruction order="9" opcode="WRITE">
+<arg1 type="string">tady-by-melo-byt-10:\032</arg1>
+</instruction>
+<instruction order="10" opcode="WRITE">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="11" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

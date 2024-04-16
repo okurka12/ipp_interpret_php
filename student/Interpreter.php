@@ -1021,9 +1021,18 @@ class Instruction {
 
             dlog("stri2int investigating " .
                 mb_substr($src1_value, $src2_value, 1));
-            $result = mb_ord(mb_substr($src1_value, $src2_value, 1));
-            $target_var->set_value("int", (string)$result);
+                $result = mb_ord(mb_substr($src1_value, $src2_value, 1));
+                $target_var->set_value("int", (string)$result);
 
+            }
+        else if ($this->get_opcode() === "strlen") {
+            $target_var = $rt->fs->lookup($this->get_first_arg_value());
+            $src_type = $this->get_nth_arg_type_resolve(2, $rt->fs);
+            $src_value = $this->get_nth_arg_value_resolve(2, $rt->fs);
+            if ($src_type !== "string") {
+                throw new IPPTypeError((string)$this);
+            }
+            $target_var->set_value("int", (string)mb_strlen($src_value));
         }
         // MARK:_jump
         else if ($this->get_opcode() === "jump") {
