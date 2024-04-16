@@ -86,6 +86,9 @@ test_file test_source38.xml 0
 test_file test_source39.xml 0
 test_file test_source40.xml 0
 test_file test_source41.xml 0
+test_file test_source42.xml 53  # jumpifeq incompatible types
+test_file test_source43.xml 53  # jumpifneq incompatible types
+test_file test_source44.xml 0
 
 
 echo "all tests done (passed $PASSED_TESTS/$TEST_COUNT)"

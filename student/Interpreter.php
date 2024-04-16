@@ -821,7 +821,7 @@ class Instruction
                 }
             }
 
-            $should_jump = $one_is_nil || $values_are_equal;
+            $should_jump = $values_are_equal;
 
             if ($should_jump && $this->get_opcode() === "jumpifeq")
             {
