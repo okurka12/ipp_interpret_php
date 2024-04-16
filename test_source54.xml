@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original source code:
+# test TYPE
+# rc: 0
+.IPPcode24
+DEFVAR GF@a
+DEFVAR GF@b
+TYPE GF@b GF@a
+WRITE string@tady-by-nemelo-byt-nic:\032
+WRITE GF@b
+WRITE string@\010
+
+-->
+<program language="IPPcode24">
+<instruction order="1" opcode="DEFVAR">
+<arg1 type="var">GF@a</arg1>
+</instruction>
+<instruction order="2" opcode="DEFVAR">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="3" opcode="TYPE">
+<arg1 type="var">GF@b</arg1>
+<arg2 type="var">GF@a</arg2>
+</instruction>
+<instruction order="4" opcode="WRITE">
+<arg1 type="string">tady-by-nemelo-byt-nic:\032</arg1>
+</instruction>
+<instruction order="5" opcode="WRITE">
+<arg1 type="var">GF@b</arg1>
+</instruction>
+<instruction order="6" opcode="WRITE">
+<arg1 type="string">\010</arg1>
+</instruction>
+</program>

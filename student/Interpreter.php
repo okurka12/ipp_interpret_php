@@ -707,7 +707,17 @@ class Instruction {
                 throw new NotImplementedException;
             }
         }
-        // MARK:add,mul,idiv
+        // MARK:_type
+        else if ($this->get_opcode() === "type") {
+            $target_var = $this->get_nth_arg_value(1);
+            $target_var = $rt->fs->lookup($target_var);
+            $source_var = $this->get_nth_arg_value(2);
+            $source_var = $rt->fs->lookup($source_var);
+
+            $source_type = $source_var->get_type();
+            $target_var->set_value("string", $source_type);
+        }
+        // MARK:_add,_mul,_idiv
         else if ($this->get_opcode() === "add") {
             $target_var = $rt->fs->lookup($this->get_first_arg_value());
             $src1_value = $this->get_int_operand(2, $rt->fs);
